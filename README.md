@@ -1,6 +1,10 @@
 # astronomy_picture_of_the_day
 
-
+<p align="center"> 
+  <a href="https://www.nasa.gov/" align="right">
+    <img width="156" alt="NASA icon" src="https://user-images.githubusercontent.com/24878574/282269386-1804fb09-3afe-4f05-9169-da18b36100a3.png">
+  </a>
+</p>
 
 ## Contents
 
