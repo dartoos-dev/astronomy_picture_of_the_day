@@ -7,6 +7,17 @@
   </a>
 </p>
 
+
+[![license](https://img.shields.io/badge/license-mit-green.svg)](https://github.com/dartoos-dev/astronomy_picture_of_the_day/blob/master/LICENSE)
+[![build](https://github.com/dartoos-dev/astronomy_picture_of_the_day/actions/workflows/build.yml/badge.svg)](https://github.com/dartoos-dev/astronomy_picture_of_the_day/actions/)
+[![codecov](https://codecov.io/gh/dartoos-dev/astronomy_picture_of_the_day/branch/master/graph/badge.svg?token=W6spF0S796)](https://codecov.io/gh/dartoos-dev/astronomy_picture_of_the_day)
+[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/rafamizes/astronomy_picture_of_the_day)](https://www.codefactor.io/repository/github/rafamizes/astronomy_picture_of_the_day)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+[![Hits-of-Code](https://hitsofcode.com/github/dartoos-dev/astronomy_picture_of_the_day?branch=master)](https://hitsofcode.com/github/dartoos-dev/astronomy_picture_of_the_day/view?branch=master)
+
+[![DevOps By
+Rultor.com](https://www.rultor.com/b/dartoos-dev/astronomy_picture_of_the_day)](https://www.rultor.com/p/dartoos-dev/astronomy_picture_of_the_day)
+
 ## Contents
 
 - [Overview](#overview)
