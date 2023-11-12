@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG.
 - LICENSE.
 - GitHub Actions CI/CD pipeline.
+- Rultor DevOps assistent.
 - Code coverage.
 - Code quality.
 - Lint rules
