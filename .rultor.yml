@@ -1,5 +1,5 @@
 docker:
-  image: cirrusci/flutter:stable
+  image: cirrusci/flutter:3.13.9
   as_root: true
 architect:
   - rafamizes
