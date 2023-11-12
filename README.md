@@ -21,6 +21,12 @@ Rultor.com](https://www.rultor.com/b/dartoos-dev/astronomy_picture_of_the_day)](
 - [Overview](#overview)
 - [Getting Started](#getting-started)
 - [Running the App](#running-the-app)
+- [Main Application Features](#main-application-features)
+- [Project Structure Overview](#project-structure-overview)
+  - [Project Architecture](#project-architecture)
+  - [Directory Structure](#directory-structure)
+  - [Package by feature](#package-by-feature)
+- [Core Third-Party Packages](#core-third-party-packages)
 - [References](#references)
 
 ## Overview
@@ -57,7 +63,7 @@ The above command will display a list similar to:
   src="https://user-images.githubusercontent.com/24878574/282270845-2ea519df-9136-4d23-96f9-15fde7c53e88.png">
 </p>
 
-Running the app on one of the listed devices in debug mode:
+For example, to run the app on one of the listed devices in debug mode:
 
 #### Android
 
@@ -77,8 +83,87 @@ Running the app on one of the listed devices in debug mode:
   flutter run -d chrome
 ```
 
+## Main Application Features
+
+- List of astronomy pictures of the day retrieved from NASA's public API.
+- Detail page of selected picture.
+- Pull-to-refresh capability.
+- Pagination.
+- Automatically retries http requests when the device connection is intermittent
+  or the server is offline at the time of the request — it uses an exponential
+  backoff algorithm to retry the failed requests.
+- It still works when offline.
+
+## Project Structure Overview
+
+### Project Architecture
+
+- Clean Architecture
+
+### Directory Structure
+
+```shell
+lib  
+└───reference  
+│   └───features  
+│   │	└───feature1  
+│   │  	│   └───sub_feature  
+│   │   │   └───data  
+│   │   │   └───domain  
+│   │   │   └───external  
+│   │   │   └───presenter  
+│   │   └───feature2  
+│   │  	│   └───sub_feature  
+│   │  	│   └───data  
+│   │  	│   └───domain  
+│   │  	│   └───external  
+│   │  	│   └───presenter  
+│   app_module.dart  
+│   app_widget.dart 
+```
+
+### Package by feature
+
+In regard to packages or modules, this project uses the "package-by-feature"
+approach rather than the more usual "package-by-layer". The former uses
+packages to reflect the feature set; it places all items related to a single
+feature into a single directory whose name corresponds to important, high-level
+aspects of the problem domain.
+
+It is important to note that package-by-feature style still honors the idea of
+separating layers, but that separation is implemented using **separate
+classes**.
+
+#### Advantages of package by feature
+
+- easy and logical code navigation -- all items needed for a task are usually in
+  the same directory.
+- emphasis on core services rather than implementation details.
+- scope minimization (package-private as default, not public as in package-by-layer).
+- low coupling between modules.
+- scalability: the number of classes remains limited to the items related
+  to a specific feature.
+
+#### Drawbacks of package by layer
+
+- poor overview of all classes that belong to a feature.
+- complex, hard to understand, and easy to break code as impact of a change is
+  hard to grasp.
+- leads to central classes containing all methods for every use case. Over time,
+  those methods get bigger (with extra parameters) to fulfill more use cases.
+
+## Core Third-Party Packages
+
+- [dartz](https://pub.dev/packages/dartz): functional library.
+- [dio](https://pub.dev/packages/dio): http client library.
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc): state manager
+- [flutter_modular](https://pub.dev/packages/flutter_modular): dependency injection and routing.
+- [lint](https://pub.dev/packages/lint): stricter static analysis rules.
+- [mocktail](https://pub.dev/packages/mocktail): mock framework for unit testing purposes.
+
 ## References
 
 - [API NASA](https://api.nasa.gov/)
+- [Clean Dart](https://github.com/Flutterando/Clean-Dart)
 - [package by feature](https://phauer.com/2020/package-by-feature/)
 - [package by feature, not layer](http://www.javapractices.com/topic/TopicAction.do?Id=205)
