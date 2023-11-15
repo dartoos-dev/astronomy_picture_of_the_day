@@ -104,22 +104,22 @@ For example, to run the app on one of the listed devices in debug mode:
 
 ```shell
 lib  
-└───reference  
-│   └───features  
-│   │	└───feature1  
-│   │  	│   └───sub_feature  
-│   │   │   └───data  
-│   │   │   └───domain  
-│   │   │   └───external  
-│   │   │   └───presenter  
-│   │   └───feature2  
-│   │  	│   └───sub_feature  
-│   │  	│   └───data  
-│   │  	│   └───domain  
-│   │  	│   └───external  
-│   │  	│   └───presenter  
+└───modules  
+│   └───feature1  
+│   │  	└───sub_feature  
+│   │   └───data  
+│   │   └───domain  
+│   │   └───external  
+│   │   └───presenter  
+│   └───feature2  
+│   │  	└───sub_feature  
+│   │  	└───data  
+│   │  	└───domain  
+│   │  	└───external  
+│   │  	└───presenter  
 │   app_module.dart  
 │   app_widget.dart 
+│   main.dart 
 ```
 
 ### Package by feature

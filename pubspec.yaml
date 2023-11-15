@@ -11,9 +11,14 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
+  dartz: ^0.10.1
+  dio: ^5.3.3
+  dio_smart_retry: ^6.0.0
+  flutter_modular: ^6.3.2
   flutter_test:
     sdk: flutter
   lint: ^2.2.0
+  logger: ^2.0.2+1
 
 flutter:
   uses-material-design: true
