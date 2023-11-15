@@ -14,3 +14,4 @@ linter:
     cancel_subscriptions: true
     close_sinks: true
     only_throw_errors: true
+    always_use_package_imports: false

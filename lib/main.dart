@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 
+// ignore_for_file: depend_on_referenced_packages
+import 'package:flutter_modular/flutter_modular.dart';
+
+import 'app_module.dart';
+import 'app_widget.dart';
+
 void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Astronomy Picture Of The Day'),
-        ),
-      ),
-    );
-  }
+  runApp(ModularApp(module: AppModule(), child: const AppWidget()));
 }
