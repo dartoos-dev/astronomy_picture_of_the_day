@@ -136,7 +136,7 @@ classes**.
 
 #### Advantages of package by feature
 
-- easy and logical code navigation -- all items needed for a task are usually in
+- easy and logical code navigation — all items needed for a task are usually in
   the same directory.
 - emphasis on core services rather than implementation details.
 - scope minimization (package-private as default, not public as in package-by-layer).
@@ -156,7 +156,6 @@ classes**.
 
 - [dartz](https://pub.dev/packages/dartz): functional library.
 - [dio](https://pub.dev/packages/dio): http client library.
-- [flutter_bloc](https://pub.dev/packages/flutter_bloc): state manager
 - [flutter_modular](https://pub.dev/packages/flutter_modular): dependency injection and routing.
 - [lint](https://pub.dev/packages/lint): stricter static analysis rules.
 - [mocktail](https://pub.dev/packages/mocktail): mock framework for unit testing purposes.
