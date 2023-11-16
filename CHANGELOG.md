@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Set up core third-party packages — [24](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/24).
+
 ## [0.1.0] - 2023-11-12
 
 ### Added
