@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class AstronomyPictureListPage extends StatelessWidget {
   const AstronomyPictureListPage({super.key});
@@ -7,7 +8,7 @@ class AstronomyPictureListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Picture List')),
-      body: const Center(child: Text('Astronomy Picture List Page')),
+      body: Center(child: Text('welcome-text'.i18n())),
     );
   }
 }
