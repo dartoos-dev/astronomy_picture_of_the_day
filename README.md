@@ -104,7 +104,7 @@ For example, to run the app on one of the listed devices in debug mode:
 
 ```shell
 lib  
-└───modules  
+└───features  
 │   └───feature1  
 │   │  	└───sub_feature  
 │   │   └───data  
@@ -117,6 +117,7 @@ lib
 │   │  	└───domain  
 │   │  	└───external  
 │   │  	└───presenter  
+└───shared  
 │   app_module.dart  
 │   app_widget.dart 
 │   main.dart 
@@ -158,6 +159,7 @@ classes**.
 - [dio](https://pub.dev/packages/dio): http client library.
 - [flutter_modular](https://pub.dev/packages/flutter_modular): dependency injection and routing.
 - [lint](https://pub.dev/packages/lint): stricter static analysis rules.
+- [localization](https://pub.dev/packages/localization): simplifies in-app translation.
 - [mocktail](https://pub.dev/packages/mocktail): mock framework for unit testing purposes.
 
 ## References

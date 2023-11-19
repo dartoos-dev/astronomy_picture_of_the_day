@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Multi language support — [#30](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/30)
+
 ### Changed
 
 - Update the "Third-Party Core Packages" section of the README file —
@@ -30,5 +34,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rultor DevOps Team Assistant.
 - Code coverage.
 - Code quality.
-- Lint rules
+- Lint rules.
 
