@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Multi language support — [#30](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/30)
-- Application Exceptions — [#32](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/32)
+- Multi language support — [#30](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/30).
+- Application Exceptions — [#32](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/32).
+- Core entities, value objects and use cases — [#34](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/34).
 
 ### Changed
 
