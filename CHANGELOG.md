@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update the "Third-Party Core Packages" section of the README file —
   [#28](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/28).
 
+### Removed
+
+- appName function — [#38](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/38).
+
 ## [0.1.1] - 2023-11-16
 
 ### Changed
