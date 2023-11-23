@@ -11,6 +11,9 @@ final class DateRange with EquatableMixin {
           'start must be equal to or earlier than end',
         );
 
+  /// A single date; [star] == [end].
+  DateRange.single(DateTime date) : this(start: date, end: date);
+
   /// Date range from start and end string in ISO-8601 format.
   DateRange.parse({
     required String startDateISO8601,
