@@ -1,15 +1,7 @@
 import '../../domain/entities/astronomy_picture.dart';
 
 /// [AstronomyPicture] model with mapping constructors.
-class AstronomyPictureApiModel extends AstronomyPicture {
-  AstronomyPictureApiModel({
-    required super.date,
-    required super.title,
-    required super.explanation,
-    required super.mediumDefinitionUrl,
-    required super.highDefinitionUrl,
-  });
-
+final class AstronomyPictureApiModel extends AstronomyPicture {
   /// Maps an astronomical picture from the NASA API response json.
   ///
   /// Example of an actual request:
