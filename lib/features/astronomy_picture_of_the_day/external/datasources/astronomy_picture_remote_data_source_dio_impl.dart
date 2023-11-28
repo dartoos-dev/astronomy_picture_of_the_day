@@ -49,10 +49,10 @@ class AstronomyPictureRemoteDataSourceDioImpl
         - status message: '${response.statusMessage}'
         """;
       throw DataSourceException(errorMessage);
-    } on DioException catch (dioError) {
+    } on DioException catch (ex) {
       throw DataSourceException(
         "Error when trying to access NASA's API.",
-        exception: dioError,
+        exception: ex,
       );
     }
   }
