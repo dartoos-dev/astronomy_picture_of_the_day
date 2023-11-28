@@ -78,6 +78,17 @@ void main() {
 
   group('equality operator "=="', () {
     test(
+        '"props" method should return a list containing the start and end dates',
+        () {
+      final startDate = DateTime.parse("2023-11-20");
+      final endDate = DateTime.parse("2023-11-25");
+      final dateRange = DateRange(
+        start: startDate,
+        end: endDate,
+      );
+      expect(dateRange.props, equals([startDate, endDate]));
+    });
+    test(
         'should evaluate to true the comparison between two date ranges that have the same start and end values',
         () {
       final startDate = DateTime.parse("2023-10-10");
