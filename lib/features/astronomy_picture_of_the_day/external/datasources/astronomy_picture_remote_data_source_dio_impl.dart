@@ -1,3 +1,4 @@
+import 'package:astronomy_picture_of_the_day/shared/http/custom_dio/types.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../shared/errors/data_source_exception.dart';
@@ -9,14 +10,15 @@ import '../../domain/value_objects/date_range.dart';
 /// http client.
 class AstronomyPictureRemoteDataSourceDioImpl
     implements AstronomyPictureRemoteDataSource<AstronomyPictureApiModel> {
-  AstronomyPictureRemoteDataSourceDioImpl(this.httpClient);
+  AstronomyPictureRemoteDataSourceDioImpl(this.httpClientFactory);
 
-  final Dio httpClient;
+  final DioFactory httpClientFactory;
 
   @override
   Future<List<AstronomyPictureApiModel>> getAstronomyPicturesByDateRange(
     DateRange range,
   ) async {
+    final httpClient = httpClientFactory();
     try {
       final response = await httpClient.get(
         AstronomyPictureApiModel.apodPath,
@@ -54,6 +56,8 @@ class AstronomyPictureRemoteDataSourceDioImpl
         "Error when trying to access NASA's API.",
         exception: ex,
       );
+    } finally {
+      httpClient.close();
     }
   }
 }
