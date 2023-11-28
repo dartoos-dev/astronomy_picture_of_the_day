@@ -75,4 +75,37 @@ void main() {
       expect(dateRange.endDateIso8601, equals('2023-12-25'));
     });
   });
+
+  group('equality operator "=="', () {
+    test(
+        'should evaluate to true the comparison between two date ranges that have the same start and end values',
+        () {
+      final startDate = DateTime.parse("2023-10-10");
+      final endDate = DateTime.parse("2023-12-25");
+      final dateRange1 = DateRange(
+        start: startDate,
+        end: endDate,
+      );
+      final dateRange2 = DateRange(
+        start: startDate,
+        end: endDate,
+      );
+      expect(dateRange1 == dateRange2, true);
+    });
+    test(
+        'should evaluate to false the comparison between two date ranges that have different start or end values',
+        () {
+      final startDate = DateTime.parse("2023-10-10");
+      final endDate = DateTime.parse("2023-12-25");
+      final dateRange1 = DateRange(
+        start: startDate,
+        end: endDate,
+      );
+      final dateRange2 = DateRange(
+        start: startDate,
+        end: endDate.add(const Duration(days: 1)),
+      );
+      expect(dateRange1 == dateRange2, false);
+    });
+  });
 }
