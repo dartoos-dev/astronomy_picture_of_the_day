@@ -78,7 +78,7 @@ void main() {
 
   group('equality operator "=="', () {
     test(
-        'should evaluate to true two date ranges with the same start and end dates',
+        'should evaluate to true the comparison between two date ranges that have the same start and end values',
         () {
       final startDate = DateTime.parse("2023-10-10");
       final endDate = DateTime.parse("2023-12-25");
@@ -93,7 +93,7 @@ void main() {
       expect(dateRange1 == dateRange2, true);
     });
     test(
-        'should evaluate to false two date ranges with different start or end dates',
+        'should evaluate to false the comparison between two date ranges that have different start or end values',
         () {
       final startDate = DateTime.parse("2023-10-10");
       final endDate = DateTime.parse("2023-12-25");
