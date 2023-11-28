@@ -9,7 +9,7 @@ void main() {
       final startDate = DateTime.parse('2023-11-21');
       expect(
         () => DateRange(start: startDate, end: earlierEndDate),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
     });
     test('should allow the same start and end date', () {
