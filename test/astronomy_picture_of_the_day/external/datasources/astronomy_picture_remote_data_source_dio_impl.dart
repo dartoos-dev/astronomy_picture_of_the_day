@@ -86,16 +86,17 @@ void main() {
     endDateISO8601: date3,
   );
 
-  /// Mandatory request options according to the given date range.
-  final requestOptions = RequestOptions(
-    path: AstronomyPictureApiModel.apodPath,
-    queryParameters: {'start_date': date1, 'end_date': date3},
-  );
-
   final queryParameters = <String, dynamic>{
     'start_date': date1,
     'end_date': date3,
   };
+
+  /// Mandatory request options according to the given date range.
+  final requestOptions = RequestOptions(
+    path: AstronomyPictureApiModel.apodPath,
+    queryParameters: queryParameters,
+  );
+
   group("valid http request (status code 200 or 204)", () {
     test('http code 200: should return the picture list', () async {
       // arrange
@@ -141,9 +142,9 @@ void main() {
 
       // Verify
       assert(pictures.length == 3);
-      expect(picture1.isEquivalentTo(pictures[0]), true);
-      expect(picture2.isEquivalentTo(pictures[1]), true);
-      expect(picture3.isEquivalentTo(pictures[2]), true);
+      expect(picture1 == pictures[0], true);
+      expect(picture2 == pictures[1], true);
+      expect(picture3 == pictures[2], true);
     });
     test('http code 204: should return an empty list', () async {
       // Arrange
