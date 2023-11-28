@@ -18,8 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core entities, value objects and use cases —
  [#34](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/34).
 
-- Core data layer — models, repositories and data source interface —
+- Core data layer elements — models, repositories and data source interface —
   [#40](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/40).
+
+- Core external layer elements — data source implementation —
+  [#46](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/46).
 
 ### Changed
 
