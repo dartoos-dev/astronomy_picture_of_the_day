@@ -11,7 +11,7 @@ final class DateRange with EquatableMixin {
           'start must be equal to or earlier than end',
         );
 
-  /// A single date; [star] == [end].
+  /// A single date; [start] == [end].
   DateRange.single(DateTime date) : this(start: date, end: date);
 
   /// Date range from start and end string in ISO-8601 format.
@@ -29,7 +29,37 @@ final class DateRange with EquatableMixin {
   /// The end of the date range.
   final DateTime end;
 
+  /// The date part of the start date in ISO-8601 format
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  ///   final moonLanding = DateTime.utc(1969, 7, 20, 20, 18, 04);
+  ///   final berlinWallFell = DateTime.utc(1989, 11, 9);
+  ///   final range = DateRange(start: moonLanding, end: berlinWallFell);
+  ///   final isoStartDate = range.startDateIso8601();
+  ///   print(isoStartDate); // 1969-07-20
+  /// ```
+  String get startDateIso8601 => _yearMonthDayIso8601(start);
+
+  /// The date part of the end date in ISO-8601 format
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  ///   final moonLanding = DateTime.utc(1969, 7, 20, 20, 18, 04);
+  ///   final berlinWallFell = DateTime.utc(1989, 11, 9);
+  ///   final range = DateRange(start: moonLanding, end: berlinWallFell);
+  ///   final isoEndDate = range.endDateIso8601();
+  ///   print(isoEndDate); // 1989-11-09
+  /// ```
+  String get endDateIso8601 => _yearMonthDayIso8601(end);
+
   /// Equality by the start and end dates.
   @override
   List<Object?> get props => [start, end];
+
+  String _yearMonthDayIso8601(DateTime dt) {
+    return '${dt.year}-${dt.month}-${dt.day}';
+  }
 }

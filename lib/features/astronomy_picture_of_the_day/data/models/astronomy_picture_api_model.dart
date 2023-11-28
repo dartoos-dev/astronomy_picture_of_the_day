@@ -2,6 +2,19 @@ import '../../domain/entities/astronomy_picture.dart';
 
 /// [AstronomyPicture] model with mapping constructors.
 final class AstronomyPictureApiModel extends AstronomyPicture {
+  /// Constructs a [AstronomyPictureApiModel] from string data.
+  AstronomyPictureApiModel.fromStringData({
+    required String dateIso8601,
+    required super.title,
+    required super.explanation,
+    required String mediumDefinitionUrl,
+    required String highDefinitionUrl,
+  }) : super(
+          date: DateTime.parse(dateIso8601),
+          mediumDefinitionUrl: Uri.parse(mediumDefinitionUrl),
+          highDefinitionUrl: Uri.parse(highDefinitionUrl),
+        );
+
   /// Maps an astronomical picture from the NASA API response json.
   ///
   /// Example of an actual request:
@@ -32,11 +45,16 @@ final class AstronomyPictureApiModel extends AstronomyPicture {
   /// }
   /// ```
   AstronomyPictureApiModel.fromJson(Map<String, dynamic> json)
-      : super(
-          date: DateTime.parse(json['date'] as String),
+      : this.fromStringData(
+          dateIso8601: json['date'] as String,
           explanation: json['explanation'] as String,
           title: json['title'] as String,
-          highDefinitionUrl: Uri.parse(json['hdurl'] as String),
-          mediumDefinitionUrl: Uri.parse(json['url'] as String),
+          highDefinitionUrl: json['hdurl'] as String,
+          mediumDefinitionUrl: json['url'] as String,
         );
+
+  static const nasaBaseUrl = 'https://api.nasa.gov';
+
+  /// Url path of NASA's Astronomy Picture of the Day API.
+  static const apodPath = '/planetary/apod';
 }
