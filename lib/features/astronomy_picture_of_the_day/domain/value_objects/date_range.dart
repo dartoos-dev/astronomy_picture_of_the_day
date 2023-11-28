@@ -60,6 +60,10 @@ final class DateRange with EquatableMixin {
   List<Object?> get props => [start, end];
 
   String _yearMonthDayIso8601(DateTime dt) {
-    return '${dt.year}-${dt.month}-${dt.day}';
+    final month = dt.month;
+    final monthString = month < 10 ? '0$month' : '$month';
+    final day = dt.day;
+    final dayString = day < 10 ? '0$day' : '$day';
+    return '${dt.year}-$monthString-$dayString';
   }
 }
