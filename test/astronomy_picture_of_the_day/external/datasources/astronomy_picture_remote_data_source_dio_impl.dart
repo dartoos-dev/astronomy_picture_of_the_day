@@ -16,10 +16,15 @@ void main() {
 
   setUp(() {
     mockDio = MockDio();
-    remoteDataSourceDioImpl = AstronomyPictureRemoteDataSourceDioImpl(mockDio);
-    registerFallbackValue(
-      DateRange(start: DateTime.now(), end: DateTime.now()),
-    );
+    remoteDataSourceDioImpl =
+        AstronomyPictureRemoteDataSourceDioImpl(() => mockDio);
+  });
+
+  // For checks that must be true at the end of each test case in this group.
+  // For example, if the Dio instance was closed after use.
+  tearDown(() {
+    // It must always close the Dio instance regardless of the request result.
+    verify(() => mockDio.close()).called(1);
   });
   const copyright1 = "NASA © 1";
   const date1 = "2023-11-20";
