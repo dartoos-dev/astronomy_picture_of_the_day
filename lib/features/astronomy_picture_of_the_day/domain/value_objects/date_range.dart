@@ -5,11 +5,17 @@ import 'package:equatable/equatable.dart';
 /// **Precondition**: [start] must be equal to or earlier than [end].
 final class DateRange with EquatableMixin {
   /// Sets the start and end values of the date range.
-  DateRange({required this.start, required this.end})
-      : assert(
-          !start.isAfter(end),
-          'start must be equal to or earlier than end',
-        );
+  ///
+  /// Throws [ArgumentError] is [start] is not equal to or earlier than [end].
+  DateRange({required this.start, required this.end}) {
+    if (start.isAfter(end)) {
+      throw ArgumentError.value(
+        'start: ${start.toIso8601String()}; end: ${end.toIso8601String()}',
+        'start',
+        'start date must be equal to or earlier than end',
+      );
+    }
+  }
 
   /// A single date; [start] == [end].
   DateRange.single(DateTime date) : this(start: date, end: date);
