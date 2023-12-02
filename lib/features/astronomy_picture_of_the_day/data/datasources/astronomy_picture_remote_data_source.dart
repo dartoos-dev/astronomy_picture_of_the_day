@@ -1,12 +1,18 @@
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/entities/astronomy_picture.dart';
-
+import '../../domain/dtos/astronomy_pictures_with_pagination.dart';
 import '../../domain/value_objects/date_range.dart';
+import '../../domain/value_objects/page.dart';
+import '../../domain/value_objects/pictures_per_page.dart';
 
 /// Remote Data Source of Astronomy Pictures.
-abstract interface class AstronomyPictureRemoteDataSource<
-    T extends AstronomyPicture> {
-  /// Retrieves astronomy pictures by date range.
+abstract interface class AstronomyPictureRemoteDataSource {
+  /// Retrieves astronomy pictures according to the given date range, page and
+  /// number of pictures per page.
   ///
   /// Throws [DatasourceException] to indicate an operation error.
-  Future<List<T>> getAstronomyPicturesByDateRange(DateRange range);
+  Future<AstronomyPicturesWithPagination>
+      getAstronomyPicturesWithPaginationByDateRange(
+    DateRange range, {
+    required Page page,
+    required PicturesPerPage picturesPerPage,
+  });
 }

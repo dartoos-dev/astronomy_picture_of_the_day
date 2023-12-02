@@ -25,6 +25,18 @@ void main() {
       expect(dateRange.start, equals(startDate));
       expect(dateRange.end, equals(endDate));
     });
+    test('should correctly calculate the range of few days', () {
+      final startDate = DateTime.parse('2023-11-21');
+      final endDate = DateTime.parse('2023-11-26');
+      final dateRange = DateRange(start: startDate, end: endDate);
+      expect(dateRange.days, 6);
+    });
+    test('should correctly calculate the days of one year interval', () {
+      final startDate = DateTime.parse('2023-01-01');
+      final endDate = DateTime.parse('2023-12-31');
+      final dateRange = DateRange(start: startDate, end: endDate);
+      expect(dateRange.days, 365);
+    });
   });
 
   group('"single" constructor', () {
@@ -32,6 +44,12 @@ void main() {
       final now = DateTime.now();
       final singleDateRange = DateRange.single(now);
       expect(singleDateRange.start, equals(singleDateRange.end));
+    });
+    test('should calculate the number of days represented by the date range',
+        () {
+      final now = DateTime.now();
+      final singleDateRange = DateRange.single(now);
+      expect(singleDateRange.days, 1);
     });
   });
   group('"parse" constructor', () {

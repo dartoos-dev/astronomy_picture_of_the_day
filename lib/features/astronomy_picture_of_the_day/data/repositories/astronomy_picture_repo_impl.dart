@@ -1,8 +1,10 @@
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/entities/astronomy_picture.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/astronomy_pictures_with_pagination.dart';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/errors/astronomy_picture_failure.dart';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
 
 import 'package:dartz/dartz.dart';
 
@@ -21,11 +23,19 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
   final LogAndLeft logger;
 
   @override
-  Future<Either<AstronomyPictureFailure, List<AstronomyPicture>>>
-      getAstronomyPicturesByDateRange(DateRange range) async {
+  Future<Either<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
+      getAstronomyPicturesWithPaginationByDateRange(
+    DateRange range, {
+    required Page page,
+    required PicturesPerPage picturesPerPage,
+  }) async {
     try {
       return Right(
-        await remoteDataSource.getAstronomyPicturesByDateRange(range),
+        await remoteDataSource.getAstronomyPicturesWithPaginationByDateRange(
+          range,
+          page: page,
+          picturesPerPage: picturesPerPage,
+        ),
       );
     } on DataSourceException catch (ex, st) {
       return logger(

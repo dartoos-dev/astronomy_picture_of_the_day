@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core external layer elements — data source implementation —
   [#46](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/46).
 
+- Pagination infrastructure code —
+  [#60](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/60).
+
 ### Changed
 
 - Update the "Third-Party Core Packages" section of the README file —
