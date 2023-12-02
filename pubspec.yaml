@@ -1,7 +1,7 @@
 name: astronomy_picture_of_the_day
 description: A Flutter project to display NASA's astronomy picture of the day.
 publish_to: 'none'
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: '>=3.1.5 <4.0.0'
