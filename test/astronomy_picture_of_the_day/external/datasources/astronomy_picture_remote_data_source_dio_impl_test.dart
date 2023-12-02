@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/data/models/astronomy_picture_api_model.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/astronomy_pictures_with_pagination.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
@@ -387,13 +388,17 @@ void main() {
         page: const Page.first(),
         picturesPerPage: const PicturesPerPage(6),
       );
+      const emptyPictures = AstronomyPicturesWithPagination.empty();
 
       // Verify
       assert(picturesWithPagination.currentPagePictures.isEmpty);
-      expect(picturesWithPagination.currentPage == const Page.first(), true);
-      expect(picturesWithPagination.lastPage == const Page.first(), true);
       expect(
-        picturesWithPagination.totalPictures == const TotalPictures.zero(),
+        picturesWithPagination.currentPage == emptyPictures.currentPage,
+        true,
+      );
+      expect(picturesWithPagination.lastPage == emptyPictures.lastPage, true);
+      expect(
+        picturesWithPagination.totalPictures == emptyPictures.totalPictures,
         true,
       );
     });
