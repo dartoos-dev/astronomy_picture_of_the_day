@@ -5,7 +5,6 @@ import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_d
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/total_pictures.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/external/datasources/astronomy_picture_remote_data_source_dio_impl.dart';
 import 'package:astronomy_picture_of_the_day/shared/errors/data_source_exception.dart';
 import 'package:dio/dio.dart';
