@@ -1,20 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'single_value.dart';
 
 /// Represents a typed ID.
-final class ID<T extends Object>
-    with EquatableMixin
+final class ID<T extends Object> extends SingleValue<String>
     implements Comparable<ID<T>> {
   /// Sets the ID value.
-  const ID(this.value);
+  const ID(super.value);
 
-  /// The ID value.
-  final String value;
-
-  /// Equality by [value].
-  @override
-  List<Object?> get props => [value];
-
-  /// [value] is the String representation.
+  /// The [value] is the String representation.
   @override
   String toString() => value;
 

@@ -57,4 +57,11 @@ final class AstronomyPictureApiModel extends AstronomyPicture {
 
   /// Url path of NASA's Astronomy Picture of the Day API.
   static const apodPath = '/planetary/apod';
+
+  /// NASA's API documents state that '1995-06-16' is the first day an APOD
+  /// picture was posted.
+  static final minStartDate = DateTime.parse('1995-06-15');
+
+  /// The maximum end date is the current date.
+  static DateTime get maxEndDate => DateTime.now();
 }

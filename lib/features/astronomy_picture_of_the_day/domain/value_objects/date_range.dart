@@ -61,6 +61,24 @@ final class DateRange with EquatableMixin {
   /// ```
   String get endDateIso8601 => _yearMonthDayIso8601(end);
 
+  /// The number of days covered by this date range
+  ///
+  /// The minimum value is 1 when [start] == [end].
+  ///
+  /// Examples:
+  ///
+  /// ```dart
+  /// final oneDay = DateRange.single(DateTime.now()).days;
+  /// print(oneDay); // 1
+  /// ...
+  /// final sixDays = DateRange.parse(
+  ///   startDateISO8601: '2023-11-21',
+  ///   endDateISO8601: '2023-11-26',
+  /// ).days;
+  /// print(sixDays); // 6
+  /// ```
+  int get days => end.difference(start).inDays + 1;
+
   /// Equality by the start and end dates.
   @override
   List<Object?> get props => [start, end];
