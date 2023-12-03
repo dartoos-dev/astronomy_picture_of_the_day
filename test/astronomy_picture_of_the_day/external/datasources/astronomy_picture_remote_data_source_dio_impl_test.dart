@@ -458,45 +458,62 @@ void main() {
     });
   });
 
-  // group("Dio exception", () {
-  //   test('should encapsulate "DioExcepton" in a "DataSourceException"',
-  //       () async {
-  //     // Arrange
-  //     final serverErrorResponse = Response(
-  //       statusCode: 500,
-  //       requestOptions: requestOptions,
-  //     );
+  group('When Dio throws "DioException', () {
+    test('should encapsulate "DioExcepton" in a "DataSourceException"',
+        () async {
+      // Arrange
+      const page1 = Page.first();
+      const sixPerPage = PicturesPerPage(6);
+      final DateRange dateRange = DateRange.parse(
+        startDateISO8601: date1,
+        endDateISO8601: date6,
+      );
+      final queryParameters = <String, dynamic>{
+        'start_date': date1,
+        'end_date': date6,
+      };
+      final requestOptions = RequestOptions(
+        path: AstronomyPictureApiModel.apodPath,
+        queryParameters: queryParameters,
+      );
+      final serverErrorResponse = Response(
+        statusCode: 500,
+        requestOptions: requestOptions,
+      );
 
-  //     final dioException = DioException(
-  //       response: serverErrorResponse,
-  //       requestOptions: requestOptions,
-  //     );
-  //     bool dataSourceExceptionWasThrown = false;
-  //     // Stub
-  //     when(
-  //       () => mockDio.get(
-  //         AstronomyPictureApiModel.apodPath,
-  //         queryParameters: queryParameters,
-  //       ),
-  //     ).thenThrow(dioException);
-  //     // Act
-  //     try {
-  //       await remoteDataSourceDioImpl.getAstronomyPicturesByDateRange(
-  //         dateRange,
-  //       );
-  //     } on DataSourceException catch (ex) {
-  //       dataSourceExceptionWasThrown = true;
-  //       // Must keep the same instance of the exception that signalled the failure.
-  //       expect(ex.exception, same(dioException));
-  //     }
-  //     assert(dataSourceExceptionWasThrown, true);
-  //     // Must have called 'get' with the right data just once.
-  //     verify(
-  //       () => mockDio.get(
-  //         AstronomyPictureApiModel.apodPath,
-  //         queryParameters: queryParameters,
-  //       ),
-  //     ).called(1);
-  //   });
-  // });
+      final dioException = DioException(
+        response: serverErrorResponse,
+        requestOptions: requestOptions,
+      );
+      bool dataSourceExceptionWasThrown = false;
+      // Stub
+      when(
+        () => mockDio.get(
+          AstronomyPictureApiModel.apodPath,
+          queryParameters: queryParameters,
+        ),
+      ).thenThrow(dioException);
+      // Act
+      try {
+        await remoteDataSourceDioImpl
+            .getAstronomyPicturesWithPaginationByDateRange(
+          dateRange,
+          page: page1,
+          picturesPerPage: sixPerPage,
+        );
+      } on DataSourceException catch (ex) {
+        dataSourceExceptionWasThrown = true;
+        // Must keep the same instance of the exception that signalled the failure.
+        expect(ex.exception, same(dioException));
+      }
+      assert(dataSourceExceptionWasThrown, true);
+      // Must have called 'get' with the right data just once.
+      verify(
+        () => mockDio.get(
+          AstronomyPictureApiModel.apodPath,
+          queryParameters: queryParameters,
+        ),
+      ).called(1);
+    });
+  });
 }
