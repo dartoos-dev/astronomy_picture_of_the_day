@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.1.5 <4.0.0'
 
 dependencies:
+  connectivity_plus: ^5.0.2
   dartz: ^0.10.1
   dio: ^5.3.3
   dio_smart_retry: ^6.0.0
@@ -16,9 +17,9 @@ dependencies:
   flutter_localizations: 
     sdk: flutter
   flutter_modular: ^6.3.2
+  internet_connection_checker_plus: ^2.1.0
   localization: ^2.1.1
   logger: ^2.0.2+1
-  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

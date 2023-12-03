@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Network availability checker —
+  [#65](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/65).
+
 ## [0.1.2] - 2023-12-02
 
 ### Added
