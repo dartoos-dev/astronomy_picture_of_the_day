@@ -12,11 +12,11 @@ import '../../data/drivers/connectivity_driver.dart';
 /// - [connectivity_plus](https://pub.dev/packages/connectivity_plus)
 /// - [internet_connection_checker_plus](https://pub.dev/packages/internet_connection_checker_plus)
 final class ConnectivityDriverImpl implements ConnectivityDriver {
-  ConnectivityDriverImpl([
-    Connectivity? connectivity,
-    InternetConnection? internet,
-  ])  : _connectivity = connectivity ?? Connectivity(),
-        _internet = internet ?? InternetConnection();
+  const ConnectivityDriverImpl(
+    Connectivity connectivity,
+    InternetConnection internet,
+  )   : _connectivity = connectivity,
+        _internet = internet;
 
   final Connectivity _connectivity;
   final InternetConnection _internet;
