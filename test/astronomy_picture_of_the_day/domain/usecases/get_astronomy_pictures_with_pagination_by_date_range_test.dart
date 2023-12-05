@@ -33,7 +33,7 @@ void main() {
     );
     registerFallbackValue(const Page.first());
     registerFallbackValue(const PicturesPerPage.seven());
-    registerFallbackValue(const AstronomyPictureRetrievalFailure());
+    registerFallbackValue(const RetrievalFailure());
     registerFallbackValue(const AstronomyPicturesWithPagination.empty());
   });
 
@@ -42,9 +42,9 @@ void main() {
     endDateISO8601: "2023-11-19",
   );
   const page = Page.first();
-  const picturesPerPage = PicturesPerPage.seven();
+  const perPage = PicturesPerPage.seven();
   const totalPictures = TotalPictures(10);
-  final lastPage = Page.last(totalPictures, picturesPerPage);
+  final lastPage = Page.last(totalPictures, perPage);
 
   group('Success:', () {
     test('should pass the paginated list of pictures to Presenter', () async {
@@ -74,7 +74,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: any(named: "page"),
-          picturesPerPage: any(named: "picturesPerPage"),
+          perPage: any(named: "perPage"),
         ),
       ).thenAnswer((_) async => Right(picturesWithPagination));
 
@@ -85,7 +85,7 @@ void main() {
         mockPresenter,
         dateRange: dateRange,
         page: page,
-        picturesPerPage: picturesPerPage,
+        perPage: perPage,
       );
 
       // assert
@@ -102,7 +102,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: any(named: "page"),
-          picturesPerPage: any(named: "picturesPerPage"),
+          perPage: any(named: "perPage"),
         ),
       ).thenAnswer((_) async => const Right(zeroPicturesWithPagination));
 
@@ -111,7 +111,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           any(),
           page: any(named: "page"),
-          picturesPerPage: any(named: "picturesPerPage"),
+          perPage: any(named: "perPage"),
         ),
       );
       verifyNever(() => mockPresenter.success(any()));
@@ -120,7 +120,7 @@ void main() {
         mockPresenter,
         dateRange: dateRange,
         page: page,
-        picturesPerPage: picturesPerPage,
+        perPage: perPage,
       );
 
       // assert
@@ -129,7 +129,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: page,
-          picturesPerPage: picturesPerPage,
+          perPage: perPage,
         ),
       ).called(1);
       verify(() => mockPresenter.success(zeroPicturesWithPagination)).called(1);
@@ -141,12 +141,12 @@ void main() {
   group('Failure:', () {
     test('should pass "AstronomyPictureFailure" to Presenter', () async {
       // arrange
-      const failure = AstronomyPictureRetrievalFailure();
+      const failure = RetrievalFailure();
       when(
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           any(),
           page: any(named: "page"),
-          picturesPerPage: any(named: "picturesPerPage"),
+          perPage: any(named: "perPage"),
         ),
       ).thenAnswer((_) async => const Left(failure));
 
@@ -155,7 +155,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           any(),
           page: any(named: "page"),
-          picturesPerPage: any(named: "picturesPerPage"),
+          perPage: any(named: "perPage"),
         ),
       );
       // act
@@ -163,7 +163,7 @@ void main() {
         mockPresenter,
         dateRange: dateRange,
         page: page,
-        picturesPerPage: picturesPerPage,
+        perPage: perPage,
       );
 
       // assert
@@ -172,7 +172,7 @@ void main() {
         () => mockRepo.getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: page,
-          picturesPerPage: picturesPerPage,
+          perPage: perPage,
         ),
       ).called(1);
       verify(() => mockPresenter.failure(failure)).called(1);

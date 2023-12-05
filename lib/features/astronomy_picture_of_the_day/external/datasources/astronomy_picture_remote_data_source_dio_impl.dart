@@ -23,11 +23,11 @@ class AstronomyPictureRemoteDataSourceDioImpl
       getAstronomyPicturesWithPaginationByDateRange(
     DateRange range, {
     required Page page,
-    required PicturesPerPage picturesPerPage,
+    required PicturesPerPage perPage,
   }) async {
     final httpClient = httpClientFactory();
     try {
-      final pageInfo = _pageInfo(range, page, picturesPerPage);
+      final pageInfo = _pageInfo(range, page, perPage);
       final response = await httpClient.get(
         AstronomyPictureApiModel.apodPath,
         queryParameters: {

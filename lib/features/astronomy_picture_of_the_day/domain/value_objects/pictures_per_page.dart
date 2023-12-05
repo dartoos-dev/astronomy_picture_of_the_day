@@ -2,7 +2,7 @@ import 'package:astronomy_picture_of_the_day/shared/value_objects/greater_than_z
 
 /// Represents the amount of pictuers per page.
 ///
-/// **Precondition**: value must be greater than zero.
+/// **Precondition**: must be greater than zero.
 final class PicturesPerPage extends GreaterThanZero {
   /// Sets the number of pictures and asserts that it is greater than zero.
   const PicturesPerPage(super.value);

@@ -10,7 +10,7 @@ abstract interface class GetAstronomyPicturesWithPaginationByDateRange {
     AstronomyPicturePresenter presenter, {
     required DateRange dateRange,
     required Page page,
-    required PicturesPerPage picturesPerPage,
+    required PicturesPerPage perPage,
   });
 }
 
@@ -25,12 +25,12 @@ final class GetAstronomyPicturesWithPaginationByDateRangeImpl
     AstronomyPicturePresenter presenter, {
     required DateRange dateRange,
     required Page page,
-    required PicturesPerPage picturesPerPage,
+    required PicturesPerPage perPage,
   }) async {
     final result = await repo.getAstronomyPicturesWithPaginationByDateRange(
       dateRange,
       page: page,
-      picturesPerPage: picturesPerPage,
+      perPage: perPage,
     );
     result.fold(presenter.failure, presenter.success);
   }
