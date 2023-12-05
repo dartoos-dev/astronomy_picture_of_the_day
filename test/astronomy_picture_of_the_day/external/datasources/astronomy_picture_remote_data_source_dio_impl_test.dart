@@ -221,7 +221,7 @@ void main() {
           .getAstronomyPicturesWithPaginationByDateRange(
         dateRange,
         page: page1,
-        picturesPerPage: sixPerPage,
+        perPage: sixPerPage,
       );
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
@@ -292,7 +292,7 @@ void main() {
           .getAstronomyPicturesWithPaginationByDateRange(
         dateRange,
         page: page2,
-        picturesPerPage: twoPicturesPerPage,
+        perPage: twoPicturesPerPage,
       );
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
@@ -337,7 +337,7 @@ void main() {
           .getAstronomyPicturesWithPaginationByDateRange(
         dateRange,
         page: page111,
-        picturesPerPage: severalPicturesPerPage,
+        perPage: severalPicturesPerPage,
       );
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
@@ -385,7 +385,7 @@ void main() {
           .getAstronomyPicturesWithPaginationByDateRange(
         dateRange,
         page: const Page.first(),
-        picturesPerPage: const PicturesPerPage(6),
+        perPage: const PicturesPerPage(6),
       );
       const emptyPictures = AstronomyPicturesWithPagination.empty();
 
@@ -442,7 +442,7 @@ void main() {
             .getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: const Page(3),
-          picturesPerPage: const PicturesPerPage(4),
+          perPage: const PicturesPerPage(4),
         );
       } on DataSourceException {
         dataSourceExceptionWasThrown = true;
@@ -499,7 +499,7 @@ void main() {
             .getAstronomyPicturesWithPaginationByDateRange(
           dateRange,
           page: page1,
-          picturesPerPage: sixPerPage,
+          perPage: sixPerPage,
         );
       } on DataSourceException catch (ex) {
         dataSourceExceptionWasThrown = true;

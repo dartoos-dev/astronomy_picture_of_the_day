@@ -1,12 +1,16 @@
 import 'error_key.dart';
 
-/// Represents failures in the operation of astronomical images
+/// Represents failures in the operation of astronomy images
 sealed class AstronomyPictureFailure {
   const AstronomyPictureFailure(this.key);
 
   final ErrorKey key;
 }
 
-final class AstronomyPictureRetrievalFailure extends AstronomyPictureFailure {
-  const AstronomyPictureRetrievalFailure() : super(ErrorKey.retrievalFailure);
+final class RetrievalFailure extends AstronomyPictureFailure {
+  const RetrievalFailure() : super(ErrorKey.retrievalFailure);
+}
+
+final class ConnectionCheckFailure extends AstronomyPictureFailure {
+  const ConnectionCheckFailure() : super(ErrorKey.connectionCheckFailure);
 }

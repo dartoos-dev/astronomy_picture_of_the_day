@@ -13,6 +13,6 @@ abstract interface class AstronomyPictureRemoteDataSource {
       getAstronomyPicturesWithPaginationByDateRange(
     DateRange range, {
     required Page page,
-    required PicturesPerPage picturesPerPage,
+    required PicturesPerPage perPage,
   });
 }

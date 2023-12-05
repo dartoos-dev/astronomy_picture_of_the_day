@@ -15,6 +15,6 @@ abstract interface class AstronomyPictureRepo {
       getAstronomyPicturesWithPaginationByDateRange(
     DateRange range, {
     required Page page,
-    required PicturesPerPage picturesPerPage,
+    required PicturesPerPage perPage,
   });
 }
