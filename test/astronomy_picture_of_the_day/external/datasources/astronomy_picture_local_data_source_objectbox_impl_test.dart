@@ -27,8 +27,11 @@ void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AstronomyPictureLocalDataSourceObjectboxImpl localDataSource;
 
+  const objectboxTestFolderPath = './objectbox_test';
+  tearDownAll(() {
+    Directory(objectboxTestFolderPath).delete(recursive: true);
+  });
   group('Test Objectbox', () {
-    const objectboxTestFolderPath = './objectbox_test';
     late Store testStore;
     late Box<AstronomyPictureObjectboxModel> testBox;
     setUp(() async {
@@ -38,7 +41,6 @@ void main() async {
     });
     tearDown(() {
       testStore.close();
-      Directory(objectboxTestFolderPath).delete(recursive: true);
     });
     group('with an empty database:', () {
       final range = DateRange.parse(
