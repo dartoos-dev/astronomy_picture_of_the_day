@@ -1,0 +1,71 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3168703955548340439",
+      "lastPropertyId": "15:2275275143682092085",
+      "name": "AstronomyPictureObjectboxModel",
+      "properties": [
+        {
+          "id": "5:2120198908906054545",
+          "name": "date",
+          "type": 10
+        },
+        {
+          "id": "6:7429273018699702901",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "7:3337710852635774451",
+          "name": "explanation",
+          "type": 9
+        },
+        {
+          "id": "10:5350422682323446768",
+          "name": "dbMediumDefinitionUrl",
+          "type": 9
+        },
+        {
+          "id": "11:7340906312369441070",
+          "name": "dbHighDefinitionUrl",
+          "type": 9
+        },
+        {
+          "id": "12:5423974020523342320",
+          "name": "pk",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "15:2275275143682092085",
+          "name": "dbId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:3168703955548340439",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    8879649020485868875,
+    16197408203058411,
+    2463125218402977389,
+    3531957509297588360,
+    377041147746122299,
+    442098449268341461,
+    1582449772615950773,
+    3881686423032662117
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

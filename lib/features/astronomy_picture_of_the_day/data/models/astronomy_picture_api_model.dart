@@ -1,8 +1,11 @@
+import '../../../../shared/value_objects/id.dart';
 import '../../domain/entities/astronomy_picture.dart';
 
 /// [AstronomyPicture] model with mapping constructors.
 final class AstronomyPictureApiModel extends AstronomyPicture {
-  /// Constructs a [AstronomyPictureApiModel] from string data.
+  /// Constructs an [AstronomyPictureApiModel] from string data and, since there
+  /// is only one image per day, sets the entity ID to the result of applying
+  /// the sha256 algorithm to [dateIso8601].
   AstronomyPictureApiModel.fromStringData({
     required String dateIso8601,
     required super.title,
@@ -10,6 +13,7 @@ final class AstronomyPictureApiModel extends AstronomyPicture {
     required String mediumDefinitionUrl,
     required String highDefinitionUrl,
   }) : super(
+          id: ID.sha256(dateIso8601),
           date: DateTime.parse(dateIso8601),
           mediumDefinitionUrl: Uri.parse(mediumDefinitionUrl),
           highDefinitionUrl: Uri.parse(highDefinitionUrl),
@@ -58,7 +62,7 @@ final class AstronomyPictureApiModel extends AstronomyPicture {
   /// Url path of NASA's Astronomy Picture of the Day API.
   static const apodPath = '/planetary/apod';
 
-  /// NASA's API documents state that '1995-06-16' is the first day an APOD
+  /// NASA's API documents state that '1995-06-15' is the first day an APOD
   /// picture was posted.
   static final minStartDate = DateTime.parse('1995-06-15');
 

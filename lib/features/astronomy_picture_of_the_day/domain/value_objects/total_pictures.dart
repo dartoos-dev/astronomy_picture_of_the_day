@@ -13,4 +13,10 @@ final class TotalPictures extends Positive {
 
   /// The number of pictures is equal to the number of days in the date range.
   TotalPictures.onePicturePerDay(DateRange range) : this(range.days);
+
+  /// Checks whether this total is numerically greater than or equal to [other].
+  ///
+  /// Returns `true` if this total is greater than or equal to [other]; `false`
+  /// otherwise.
+  bool operator >=(TotalPictures other) => value >= other.value;
 }
