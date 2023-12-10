@@ -12,8 +12,8 @@ final class AstronomyPicturesWithPagination {
   });
   const AstronomyPicturesWithPagination.empty()
       : this(
-          currentPage: const Page.first(),
-          lastPage: const Page.first(),
+          currentPage: const Page.zero(),
+          lastPage: const Page.zero(),
           totalPictures: const TotalPictures.zero(),
           currentPagePictures: const [],
         );

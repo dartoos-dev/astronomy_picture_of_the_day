@@ -53,9 +53,7 @@ void main() {
     });
   });
   group('"parse" constructor', () {
-    test(
-        'should parse the string data and set the start and end dates accordingly',
-        () {
+    test('should parse the string data and set the dates accordingly', () {
       const date1 = "2023-11-20";
       const date2 = "2023-11-21";
       final parsedDateRange =

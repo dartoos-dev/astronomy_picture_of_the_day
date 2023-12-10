@@ -10,4 +10,8 @@ abstract class SingleValue<T> with EquatableMixin {
   /// Equality by [value].
   @override
   List<Object?> get props => [value];
+
+  /// Converts [value] to its string representation.
+  @override
+  String toString() => value.toString();
 }
