@@ -225,17 +225,18 @@ void main() {
 
       // Act
       final picturesWithPagination =
-          await remoteDataSourceDioImpl.getAstronomyPictures(page1PerPage6);
+          await remoteDataSourceDioImpl.getAstronomyPicturesDesc(page1PerPage6);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
       assert(paginatedPictures.length == 6);
-      expect(picture1 == paginatedPictures[0], true);
-      expect(picture2 == paginatedPictures[1], true);
-      expect(picture3 == paginatedPictures[2], true);
-      expect(picture4 == paginatedPictures[3], true);
-      expect(picture5 == paginatedPictures[4], true);
-      expect(picture6 == paginatedPictures[5], true);
+      // Descending order by date.
+      expect(picture1 == paginatedPictures[5], true);
+      expect(picture2 == paginatedPictures[4], true);
+      expect(picture3 == paginatedPictures[3], true);
+      expect(picture4 == paginatedPictures[2], true);
+      expect(picture5 == paginatedPictures[1], true);
+      expect(picture6 == paginatedPictures[0], true);
     });
     test('"page = 2" and "per page = 2": should return pictures 3 and 4',
         () async {
@@ -294,13 +295,14 @@ void main() {
 
       // Act
       final picturesWithPagination =
-          await remoteDataSourceDioImpl.getAstronomyPictures(page2PerPage2);
+          await remoteDataSourceDioImpl.getAstronomyPicturesDesc(page2PerPage2);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
       assert(paginatedPictures.length == 2);
-      expect(picture3 == paginatedPictures[0], true);
-      expect(picture4 == paginatedPictures[1], true);
+      // Descending order by date.
+      expect(picture3 == paginatedPictures[1], true);
+      expect(picture4 == paginatedPictures[0], true);
     });
     test('"page = 111" and "per page = 333" should return the entire list',
         () async {
@@ -336,18 +338,19 @@ void main() {
       ).thenAnswer((_) async => okResponseWithPage2Content);
 
       // Act
-      final picturesWithPagination =
-          await remoteDataSourceDioImpl.getAstronomyPictures(page111PerPage333);
+      final picturesWithPagination = await remoteDataSourceDioImpl
+          .getAstronomyPicturesDesc(page111PerPage333);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
       assert(paginatedPictures.length == 6);
-      expect(picture1 == paginatedPictures[0], true);
-      expect(picture2 == paginatedPictures[1], true);
-      expect(picture3 == paginatedPictures[2], true);
-      expect(picture4 == paginatedPictures[3], true);
-      expect(picture5 == paginatedPictures[4], true);
-      expect(picture6 == paginatedPictures[5], true);
+      // Descending order by date.
+      expect(picture1 == paginatedPictures[5], true);
+      expect(picture2 == paginatedPictures[4], true);
+      expect(picture3 == paginatedPictures[3], true);
+      expect(picture4 == paginatedPictures[2], true);
+      expect(picture5 == paginatedPictures[1], true);
+      expect(picture6 == paginatedPictures[0], true);
     });
     test('No pictures (http code 204): should return an empty list', () async {
       final queryParameters = <String, dynamic>{
@@ -375,7 +378,7 @@ void main() {
       ).thenAnswer((_) async => okResponseWithNoContent);
       // Act
       final picturesWithPagination =
-          await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
+          await remoteDataSourceDioImpl.getAstronomyPicturesDesc(pagination);
       const emptyPictures = AstronomyPicturesWithPagination.empty();
 
       // Verify
@@ -421,7 +424,7 @@ void main() {
       ).thenAnswer((_) async => clientErrorResponse);
       // Act
       try {
-        await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
+        await remoteDataSourceDioImpl.getAstronomyPicturesDesc(pagination);
       } on DataSourceException {
         dataSourceExceptionWasThrown = true;
       }
@@ -467,7 +470,7 @@ void main() {
       ).thenThrow(dioException);
       // Act
       try {
-        await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
+        await remoteDataSourceDioImpl.getAstronomyPicturesDesc(pagination);
       } on DataSourceException catch (ex) {
         dataSourceExceptionWasThrown = true;
         // Must keep the same instance of the exception that signalled the failure.

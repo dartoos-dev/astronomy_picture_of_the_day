@@ -20,7 +20,7 @@ class AstronomyPictureRemoteDataSourceDioImpl
   final DioFactory httpClientFactory;
 
   @override
-  Future<AstronomyPicturesWithPagination> getAstronomyPictures(
+  Future<AstronomyPicturesWithPagination> getAstronomyPicturesDesc(
     Pagination pagination,
   ) async {
     final httpClient = httpClientFactory();
@@ -49,7 +49,7 @@ class AstronomyPictureRemoteDataSourceDioImpl
           currentPage: pageInfo.currentPage,
           lastPage: pageInfo.lastPage,
           totalPictures: pageInfo.totalPictures,
-          currentPagePictures: astronomyPictureList,
+          currentPagePictures: astronomyPictureList..sort(),
         );
       }
 

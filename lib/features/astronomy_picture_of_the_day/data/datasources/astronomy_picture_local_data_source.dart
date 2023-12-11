@@ -4,11 +4,12 @@ import '../../domain/entities/astronomy_picture.dart';
 
 /// Local Data Source of Astronomy Pictures.
 abstract interface class AstronomyPictureLocalDataSource {
-  /// Retrieves astronomy pictures according to the given date range, page and
-  /// number of pictures per page — [pagination].
+  /// Retrieves, in descending order of date, astronomy pictures according to
+  /// the given date date range, page and the number of pictures per page —
+  /// [pagination].
   ///
   /// Throws [DatasourceException] to indicate an operation error.
-  Future<AstronomyPicturesWithPagination> getAstronomyPictures(
+  Future<AstronomyPicturesWithPagination> getAstronomyPicturesDesc(
     Pagination pagination,
   );
 

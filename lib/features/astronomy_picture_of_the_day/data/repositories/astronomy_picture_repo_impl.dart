@@ -33,7 +33,7 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
 
   @override
   Future<Either<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
-      getAstronomyPictures(Pagination pagination) async {
+      getAstronomyPicturesDesc(Pagination pagination) async {
     try {
       // The first attempt is to get all pictures from the device's local
       // storage.
@@ -66,7 +66,7 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
 
   Future<Right<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
       _getPicturesFromLocalDataSource(Pagination pagination) async {
-    return Right(await _localDataSource.getAstronomyPictures(pagination));
+    return Right(await _localDataSource.getAstronomyPicturesDesc(pagination));
   }
 
   /// Gets images from remote server and caches them locally.
@@ -74,7 +74,7 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
       _getPicturesFromRemoteDataSourceAndCachesThemLocally(
     Pagination pagination,
   ) async {
-    final result = await _remoteDataSource.getAstronomyPictures(pagination);
+    final result = await _remoteDataSource.getAstronomyPicturesDesc(pagination);
     await _localDataSource.saveAstronomyPictures(result.currentPagePictures);
     return Right(result);
   }

@@ -3,7 +3,9 @@ import 'package:equatable/equatable.dart';
 import '../../../../shared/value_objects/id.dart';
 
 /// Astronomy picture entity with a typed ID.
-class AstronomyPicture with EquatableMixin {
+class AstronomyPicture
+    with EquatableMixin
+    implements Comparable<AstronomyPicture> {
   const AstronomyPicture({
     this.id = const ID.empty(),
     required this.date,
@@ -33,4 +35,9 @@ class AstronomyPicture with EquatableMixin {
       highDefinitionUrl,
     ];
   }
+
+  /// Sorts in descending [date] order; in other words: the most recent images
+  /// will be listed first.
+  @override
+  int compareTo(AstronomyPicture other) => other.date.compareTo(date);
 }

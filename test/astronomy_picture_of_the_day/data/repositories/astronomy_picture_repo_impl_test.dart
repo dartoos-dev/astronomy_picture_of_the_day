@@ -62,19 +62,19 @@ void main() {
       // forces to get pictures from local storage
       when(() => mockLocalDataSource.containsPictures(any()))
           .thenAnswer((_) async => true);
-      when(() => mockLocalDataSource.getAstronomyPictures(pagination))
+      when(() => mockLocalDataSource.getAstronomyPicturesDesc(pagination))
           .thenAnswer((_) async => localPicturesWithPagination);
     });
     // verifications that should be true for all test cases of this group.
     tearDown(() {
       // There should be 1 interaction with the Local Data Source.
-      verify(() => mockLocalDataSource.getAstronomyPictures(pagination))
+      verify(() => mockLocalDataSource.getAstronomyPicturesDesc(pagination))
           .called(1);
       // There should be no connection check
       verifyNever(() => mockConnectivityDriver.hasActiveInternetConnection);
 
       // Should not have tried to get pictures from Remote Data Source.
-      verifyNever(() => mockRemoteDataSource.getAstronomyPictures(any()));
+      verifyNever(() => mockRemoteDataSource.getAstronomyPicturesDesc(any()));
     });
     test('should return the list of astronomy pictures', () async {
       localPictures = [
@@ -99,7 +99,7 @@ void main() {
       );
 
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // Should return the actual list of astronomy pictures.
       expect(result, equals(Right(localPicturesWithPagination)));
@@ -109,7 +109,7 @@ void main() {
       localPicturesWithPagination =
           const AstronomyPicturesWithPagination.empty();
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // Should return an empty list of astronomy pictures.
       expect(
@@ -132,7 +132,7 @@ void main() {
       void voidPlaceholder;
       when(() => mockLocalDataSource.saveAstronomyPictures(any()))
           .thenAnswer((_) async => voidPlaceholder);
-      when(() => mockRemoteDataSource.getAstronomyPictures(pagination))
+      when(() => mockRemoteDataSource.getAstronomyPicturesDesc(pagination))
           .thenAnswer((_) async => remotePicturesWithPagination);
     });
     // verifications that should be true for all test cases of this group.
@@ -143,14 +143,16 @@ void main() {
       // must cache the exactly same pictures.
       expect(capturedArgument.first, equals(remotePictures));
       // There should be 1 interaction with the Remote Data Source.
-      verify(() => mockRemoteDataSource.getAstronomyPictures(pagination))
+      verify(() => mockRemoteDataSource.getAstronomyPicturesDesc(pagination))
           .called(1);
       // There should be 1 connection check
       verify(() => mockConnectivityDriver.hasActiveInternetConnection)
           .called(1);
 
       // Should not have tried to get pictures from Local Data Source.
-      verifyNever(() => mockLocalDataSource.getAstronomyPictures(pagination));
+      verifyNever(
+        () => mockLocalDataSource.getAstronomyPicturesDesc(pagination),
+      );
     });
     test('should cache and return the list of astronomy pictures', () async {
       remotePictures = [
@@ -175,7 +177,7 @@ void main() {
       );
 
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // Should return the actual list of astronomy pictures.
       expect(result, equals(Right(remotePicturesWithPagination)));
@@ -186,7 +188,7 @@ void main() {
       remotePicturesWithPagination =
           const AstronomyPicturesWithPagination.empty();
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // Should return an empty list of astronomy pictures.
       expect(
@@ -205,7 +207,7 @@ void main() {
       when(() => mockLocalDataSource.containsPictures(any()))
           .thenAnswer((_) async => true);
       when(
-        () => mockLocalDataSource.getAstronomyPictures(pagination),
+        () => mockLocalDataSource.getAstronomyPicturesDesc(pagination),
       ).thenAnswer((_) async => throw dataSourceException);
       when(
         () => mockLogger
@@ -218,7 +220,7 @@ void main() {
       ).thenAnswer((_) => const Left(retrievalFailure));
 
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // assert
       // There should be 1 interaction with the logger.
@@ -249,7 +251,7 @@ void main() {
       // must have an active connection
       when(() => mockConnectivityDriver.hasActiveInternetConnection)
           .thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.getAstronomyPictures(any()))
+      when(() => mockRemoteDataSource.getAstronomyPicturesDesc(any()))
           .thenAnswer((_) async => throw dataSourceException);
       when(
         () => mockLogger
@@ -262,7 +264,7 @@ void main() {
       ).thenAnswer((_) => const Left(retrievalFailure));
 
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // assert
       // There should be 1 interaction with the logger.
@@ -304,7 +306,7 @@ void main() {
       ).thenAnswer((_) => const Left(connectionCheckFailure));
 
       // act
-      final result = await repo.getAstronomyPictures(pagination);
+      final result = await repo.getAstronomyPicturesDesc(pagination);
 
       // assert
       // There should be 1 interaction with the logger.
