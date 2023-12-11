@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/data/models/astronomy_picture_api_model.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/astronomy_pictures_with_pagination.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/pagination.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
@@ -17,15 +18,24 @@ void main() {
   late MockDio mockDio;
   late AstronomyPictureRemoteDataSourceDioImpl remoteDataSourceDioImpl;
 
+  final dateRange = DateRange(
+    start: DateTime.parse('2023-11-21'),
+    end: DateTime.parse('2023-11-26'),
+  );
+  final pagination = Pagination(
+    range: dateRange,
+    page: const Page.first(),
+    perPage: const PicturesPerPage(6),
+  );
+
+  setUpAll(() {
+    registerFallbackValue(Pagination.oneWeek());
+    registerFallbackValue(const AstronomyPicturesWithPagination.empty());
+  });
   setUp(() {
     mockDio = MockDio();
     remoteDataSourceDioImpl =
         AstronomyPictureRemoteDataSourceDioImpl(() => mockDio);
-    registerFallbackValue(
-      DateRange(start: DateTime.now(), end: DateTime.now()),
-    );
-    registerFallbackValue(const Page.first());
-    registerFallbackValue(const PicturesPerPage.seven());
   });
 
   // For checks that must be true at the end of each test case in this group.
@@ -181,21 +191,18 @@ void main() {
       highDefinitionUrl: hdurl6,
     );
 
-    final DateRange dateRange = DateRange.parse(
-      startDateISO8601: date1,
-      endDateISO8601: date6,
-    );
-    test(
-        '"page" = 1 and "pictures per page" = 6: should return the entire picture list',
+    test('"page = 1" and "per page = 6": should return the entire picture list',
         () async {
       // Arrange
-
-      const page1 = Page.first();
-      const sixPerPage = PicturesPerPage(6);
       final queryParameters = <String, dynamic>{
         'start_date': date1,
         'end_date': date6,
       };
+      final page1PerPage6 = Pagination(
+        range: dateRange,
+        page: const Page(1),
+        perPage: const PicturesPerPage(6),
+      );
 
       /// Mandatory request options according to the given date range.
       final requestOptions = RequestOptions(
@@ -217,12 +224,8 @@ void main() {
       ).thenAnswer((_) async => okResponseWithFullContent);
 
       // Act
-      final picturesWithPagination = await remoteDataSourceDioImpl
-          .getAstronomyPicturesWithPaginationByDateRange(
-        dateRange,
-        page: page1,
-        perPage: sixPerPage,
-      );
+      final picturesWithPagination =
+          await remoteDataSourceDioImpl.getAstronomyPictures(page1PerPage6);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
@@ -234,13 +237,15 @@ void main() {
       expect(picture5 == paginatedPictures[4], true);
       expect(picture6 == paginatedPictures[5], true);
     });
-    test(
-        '"page" = 2 and "pictures per page" = 2: should return pictures 3 and 4',
+    test('"page = 2" and "per page = 2": should return pictures 3 and 4',
         () async {
       // Arrange
 
-      const page2 = Page(2);
-      const twoPicturesPerPage = PicturesPerPage(2);
+      final page2PerPage2 = Pagination(
+        range: dateRange,
+        page: const Page(2),
+        perPage: const PicturesPerPage(2),
+      );
       const pictureListJson = """
 [
   {
@@ -288,12 +293,8 @@ void main() {
       ).thenAnswer((_) async => okResponseWithPage2Content);
 
       // Act
-      final picturesWithPagination = await remoteDataSourceDioImpl
-          .getAstronomyPicturesWithPaginationByDateRange(
-        dateRange,
-        page: page2,
-        perPage: twoPicturesPerPage,
-      );
+      final picturesWithPagination =
+          await remoteDataSourceDioImpl.getAstronomyPictures(page2PerPage2);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
@@ -301,13 +302,15 @@ void main() {
       expect(picture3 == paginatedPictures[0], true);
       expect(picture4 == paginatedPictures[1], true);
     });
-    test(
-        'edge case "page = 111" and "pictures per page = 333" should return the entire picture list',
+    test('"page = 111" and "per page = 333" should return the entire list',
         () async {
       // Arrange
 
-      const page111 = Page(111);
-      const severalPicturesPerPage = PicturesPerPage(333);
+      final page111PerPage333 = Pagination(
+        range: dateRange,
+        page: const Page(111),
+        perPage: const PicturesPerPage(333),
+      );
       final queryParameters = <String, dynamic>{
         'start_date': date1,
         'end_date': date6,
@@ -333,12 +336,8 @@ void main() {
       ).thenAnswer((_) async => okResponseWithPage2Content);
 
       // Act
-      final picturesWithPagination = await remoteDataSourceDioImpl
-          .getAstronomyPicturesWithPaginationByDateRange(
-        dateRange,
-        page: page111,
-        perPage: severalPicturesPerPage,
-      );
+      final picturesWithPagination =
+          await remoteDataSourceDioImpl.getAstronomyPictures(page111PerPage333);
       final paginatedPictures = picturesWithPagination.currentPagePictures;
 
       // Verify
@@ -351,12 +350,6 @@ void main() {
       expect(picture6 == paginatedPictures[5], true);
     });
     test('No pictures (http code 204): should return an empty list', () async {
-      // Arrange
-      final DateRange dateRange = DateRange.parse(
-        startDateISO8601: date1,
-        endDateISO8601: date6,
-      );
-
       final queryParameters = <String, dynamic>{
         'start_date': date1,
         'end_date': date6,
@@ -381,12 +374,8 @@ void main() {
         ),
       ).thenAnswer((_) async => okResponseWithNoContent);
       // Act
-      final picturesWithPagination = await remoteDataSourceDioImpl
-          .getAstronomyPicturesWithPaginationByDateRange(
-        dateRange,
-        page: const Page.first(),
-        perPage: const PicturesPerPage(6),
-      );
+      final picturesWithPagination =
+          await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
       const emptyPictures = AstronomyPicturesWithPagination.empty();
 
       // Verify
@@ -407,12 +396,6 @@ void main() {
     test('http code other than 200 or 204: should throw "DataSourceException"',
         () async {
       // Arrange
-
-      final DateRange dateRange = DateRange.parse(
-        startDateISO8601: date1,
-        endDateISO8601: date6,
-      );
-
       final queryParameters = <String, dynamic>{
         'start_date': date1,
         'end_date': date6,
@@ -438,12 +421,7 @@ void main() {
       ).thenAnswer((_) async => clientErrorResponse);
       // Act
       try {
-        await remoteDataSourceDioImpl
-            .getAstronomyPicturesWithPaginationByDateRange(
-          dateRange,
-          page: const Page(3),
-          perPage: const PicturesPerPage(4),
-        );
+        await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
       } on DataSourceException {
         dataSourceExceptionWasThrown = true;
       }
@@ -462,12 +440,6 @@ void main() {
     test('should encapsulate "DioExcepton" in a "DataSourceException"',
         () async {
       // Arrange
-      const page1 = Page.first();
-      const sixPerPage = PicturesPerPage(6);
-      final DateRange dateRange = DateRange.parse(
-        startDateISO8601: date1,
-        endDateISO8601: date6,
-      );
       final queryParameters = <String, dynamic>{
         'start_date': date1,
         'end_date': date6,
@@ -495,12 +467,7 @@ void main() {
       ).thenThrow(dioException);
       // Act
       try {
-        await remoteDataSourceDioImpl
-            .getAstronomyPicturesWithPaginationByDateRange(
-          dateRange,
-          page: page1,
-          perPage: sixPerPage,
-        );
+        await remoteDataSourceDioImpl.getAstronomyPictures(pagination);
       } on DataSourceException catch (ex) {
         dataSourceExceptionWasThrown = true;
         // Must keep the same instance of the exception that signalled the failure.

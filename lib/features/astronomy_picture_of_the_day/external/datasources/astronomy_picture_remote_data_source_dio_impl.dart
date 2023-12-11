@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import '../../../../shared/errors/data_source_exception.dart';
 import '../../data/datasources/astronomy_picture_remote_data_source.dart';
 import '../../data/models/astronomy_picture_api_model.dart';
+import '../../domain/dtos/pagination.dart';
 import '../../domain/value_objects/date_range.dart';
 import '../../domain/value_objects/total_pictures.dart';
 
@@ -19,15 +20,12 @@ class AstronomyPictureRemoteDataSourceDioImpl
   final DioFactory httpClientFactory;
 
   @override
-  Future<AstronomyPicturesWithPagination>
-      getAstronomyPicturesWithPaginationByDateRange(
-    DateRange range, {
-    required Page page,
-    required PicturesPerPage perPage,
-  }) async {
+  Future<AstronomyPicturesWithPagination> getAstronomyPictures(
+    Pagination pagination,
+  ) async {
     final httpClient = httpClientFactory();
     try {
-      final pageInfo = _pageInfo(range, page, perPage);
+      final pageInfo = _pageInfo(pagination);
       final response = await httpClient.get(
         AstronomyPictureApiModel.apodPath,
         queryParameters: {
@@ -79,20 +77,16 @@ class AstronomyPictureRemoteDataSourceDioImpl
   }
 
   /// Pagination-related info.
-  _PageInfoDto _pageInfo(
-    DateRange range,
-    Page page,
-    PicturesPerPage perPage,
-  ) {
-    final totalPictures = TotalPictures.onePicturePerDay(range);
-    final lastPage = Page.last(totalPictures, perPage);
+  _PageInfoDto _pageInfo(Pagination pagination) {
+    final totalPictures = TotalPictures.onePicturePerDay(pagination.range);
+    final lastPage = Page.last(totalPictures, pagination.perPage);
     // ensures that there is no "past-the-end" page.
-    final currentPage = page > lastPage ? lastPage : page;
+    final currentPage = pagination.page > lastPage ? lastPage : pagination.page;
     final calculatedDateRange = _calculatedPageDateRange(
-      range,
+      pagination.range,
       page: currentPage,
       lastPage: lastPage,
-      perPage: perPage,
+      perPage: pagination.perPage,
       totalPictures: totalPictures,
     );
     return _PageInfoDto(
