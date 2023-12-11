@@ -35,6 +35,73 @@ void main() {
     test('should extract "url" as is', () async {
       expect(astronomyPicture.mediumDefinitionUrl, equals(url));
     });
+    test('should sort by date in descending order', () {
+      final picture1 = AstronomyPicture(
+        date: DateTime.parse("2023-11-21"),
+        title: "Fleming's Triangular Wisp",
+        explanation: "Blah blah blah 1",
+        mediumDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/FlemingsWisp_Gualco_960.jpg",
+        ),
+        highDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/FlemingsWisp_Gualco_2801.jpg",
+        ),
+      );
+
+      final picture2 = AstronomyPicture(
+        date: DateTime.parse("2023-11-22"),
+        title: "IC 342: Hidden Galaxy in Camelopardalis",
+        explanation: "Blah blah blah 2",
+        mediumDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/ic342asi294large_1024.jpg",
+        ),
+        highDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/ic342asi294large.jpg",
+        ),
+      );
+
+      final picture3 = AstronomyPicture(
+        date: DateTime.parse("2023-11-23"),
+        title: "Along the Taurus Molecular Cloud",
+        explanation: "Blah blah blah 3",
+        mediumDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/ngc1555wide1024.jpg",
+        ),
+        highDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/ngc1555wide4096.jpg",
+        ),
+      );
+      final picture4 = AstronomyPicture(
+        date: DateTime.parse("2023-11-24"),
+        title: "Stereo Jupiter near Opposition",
+        explanation: "Blah blah blah 4",
+        mediumDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/2023-11-17-1617_1632-Jupiter_Stereo1200.png",
+        ),
+        highDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/2023-11-17-1617_1632-Jupiter_Stereo.png",
+        ),
+      );
+      final picture5 = AstronomyPicture(
+        date: DateTime.parse("2023-11-25"),
+        title: "Little Planet Aurora",
+        explanation: "Blah blah blah 5",
+        mediumDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/Kirkjufell2023Nov9_1024.jpg",
+        ),
+        highDefinitionUrl: Uri.parse(
+          "https://apod.nasa.gov/apod/image/2311/Kirkjufell2023Nov9_2048.jpg",
+        ),
+      );
+      final unsortedList = [picture1, picture3, picture5, picture2, picture4];
+      expect(unsortedList..sort(), [
+        picture5,
+        picture4,
+        picture3,
+        picture2,
+        picture1,
+      ]);
+    });
   });
 
   group("equality operator '=='", () {

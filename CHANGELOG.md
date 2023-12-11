@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Local storage of astronomy pictures —
   [#67](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/67).
 
+- Pictures retrieval in descending order of picture date —
+  [#73](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/7).
+
 ## [0.1.2] - 2023-12-02
 
 ### Added

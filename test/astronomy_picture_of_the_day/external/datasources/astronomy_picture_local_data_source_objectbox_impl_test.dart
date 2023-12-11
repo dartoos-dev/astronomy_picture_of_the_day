@@ -66,7 +66,8 @@ void main() async {
       test('fetching methods should return empty values', () async {
         const zeroPage = Page.zero();
         const zeroTotal = TotalPictures.zero();
-        final pictures = await localDataSource.getAstronomyPictures(pagination);
+        final pictures =
+            await localDataSource.getAstronomyPicturesDesc(pagination);
         expect(pictures.currentPagePictures, const <AstronomyPicture>[]);
         expect(pictures.currentPage, const Page.first());
         expect(pictures.lastPage, zeroPage);
@@ -356,7 +357,28 @@ void main() async {
           expect(containsPicturesOneDayEarlierAndOneDayLater, false);
         });
       });
-      group('method "getAstronomyPictures:"', () {
+      group('method "getAstronomyPicturesDesc:"', () {
+        test('should return pictures in descending order of date', () async {
+          final page1PerPage10 = Pagination(
+            range: range1To10,
+            page: const Page.first(),
+            perPage: const PicturesPerPage(10),
+          );
+          final pagePictures =
+              await localDataSource.getAstronomyPicturesDesc(page1PerPage10);
+          final sortedPictures = pagePictures.currentPagePictures;
+          assert(sortedPictures.length == 10);
+          expect(picture10, sortedPictures[0]);
+          expect(picture9, sortedPictures[1]);
+          expect(picture8, sortedPictures[2]);
+          expect(picture7, sortedPictures[3]);
+          expect(picture6, sortedPictures[4]);
+          expect(picture5, sortedPictures[5]);
+          expect(picture4, sortedPictures[6]);
+          expect(picture3, sortedPictures[7]);
+          expect(picture2, sortedPictures[8]);
+          expect(picture1, sortedPictures[9]);
+        });
         test('should return pictures according to pagination', () async {
           final page1PerPage4 = Pagination(
             range: range1To10,
@@ -364,7 +386,7 @@ void main() async {
             perPage: fourPerPage,
           );
           final firstPage =
-              await localDataSource.getAstronomyPictures(page1PerPage4);
+              await localDataSource.getAstronomyPicturesDesc(page1PerPage4);
           expect(
             firstPage.currentPagePictures,
             equals([picture10, picture9, picture8, picture7]),
@@ -376,7 +398,7 @@ void main() async {
             perPage: fourPerPage,
           );
           final secondPage =
-              await localDataSource.getAstronomyPictures(page2PerPage4);
+              await localDataSource.getAstronomyPicturesDesc(page2PerPage4);
           expect(
             secondPage.currentPagePictures,
             equals([picture6, picture5, picture4, picture3]),
@@ -387,7 +409,7 @@ void main() async {
             perPage: fourPerPage,
           );
           final lastPage =
-              await localDataSource.getAstronomyPictures(page3PerPage4);
+              await localDataSource.getAstronomyPicturesDesc(page3PerPage4);
           expect(lastPage.currentPagePictures, equals([picture2, picture1]));
 
           final page4PerPage4 = Pagination(
@@ -396,7 +418,7 @@ void main() async {
             perPage: fourPerPage,
           );
           final pastTheEndPage =
-              await localDataSource.getAstronomyPictures(page4PerPage4);
+              await localDataSource.getAstronomyPicturesDesc(page4PerPage4);
           expect(pastTheEndPage.currentPagePictures.isEmpty, true);
         });
       });
@@ -428,8 +450,8 @@ void main() async {
       localDataSource.containsPictures(pagination);
       verify(() => mockQuery.close()).called(3);
     });
-    test('method "getAstronomyPictures" should close "Query" object', () {
-      localDataSource.getAstronomyPictures(pagination);
+    test('method "getAstronomyPicturesDesc" should close "Query" object', () {
+      localDataSource.getAstronomyPicturesDesc(pagination);
       verify(() => mockQuery.close()).called(1);
     });
   });
@@ -478,12 +500,12 @@ void main() async {
       }
       expect(caughtDataSourceException, true);
     });
-    test('method "getAstronomyPictures" should throw "DataSourceException"',
+    test('method "getAstronomyPicturesDesc" should throw "DataSourceException"',
         () async {
       when(() => mockQuery.find()).thenThrow(exception);
       bool caughtDataSourceException = false;
       try {
-        await localDataSource.getAstronomyPictures(pagination);
+        await localDataSource.getAstronomyPicturesDesc(pagination);
       } on DataSourceException catch (ex) {
         caughtDataSourceException = true;
         expect(ex.exception, same(exception));

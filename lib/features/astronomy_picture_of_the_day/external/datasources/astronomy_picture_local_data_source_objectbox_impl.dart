@@ -56,15 +56,14 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
   }
 
   @override
-  Future<AstronomyPicturesWithPagination> getAstronomyPictures(
+  Future<AstronomyPicturesWithPagination> getAstronomyPicturesDesc(
     Pagination pagination,
   ) async {
-    final dateRangeQueryOrderByDateAsc =
-        _dateRangeQueryOrderByDateDesc(pagination.range);
+    final dateRangeDescQuery = _dateRangeDescQuery(pagination.range);
     try {
       final totalPicturesByDateRange =
-          TotalPictures(dateRangeQueryOrderByDateAsc.count());
-      final pagingQuery = dateRangeQueryOrderByDateAsc
+          TotalPictures(dateRangeDescQuery.count());
+      final pagingQuery = dateRangeDescQuery
         ..offset = pagination.page.offset(pagination.perPage)
         ..limit = pagination.perPage.value;
       final pagePictures = pagingQuery.find();
@@ -83,7 +82,7 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
         exception: ex,
       );
     } finally {
-      dateRangeQueryOrderByDateAsc.close();
+      dateRangeDescQuery.close();
     }
   }
 
@@ -153,7 +152,7 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
   }
 
   /// Query by [DateRange] ordered by descending date.
-  Query<AstronomyPictureObjectboxModel> _dateRangeQueryOrderByDateDesc(
+  Query<AstronomyPictureObjectboxModel> _dateRangeDescQuery(
     DateRange range,
   ) {
     return _box

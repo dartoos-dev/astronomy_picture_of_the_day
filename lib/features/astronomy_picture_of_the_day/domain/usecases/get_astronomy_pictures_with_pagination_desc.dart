@@ -2,17 +2,18 @@ import '../dtos/pagination.dart';
 import '../presenter/astronomy_picture_presenter.dart';
 import '../repositories/astronomy_picture_repo.dart';
 
-abstract interface class GetAstronomyPicturesWithPagination {
-  /// Retrieves and process astronomy pictures.
+/// Astronomy pictures in descending order of date.
+abstract interface class GetAstronomyPicturesWithPaginationDesc {
+  /// Retrieves astronomy pictures in descending order of date.
   Future<void> call(
     AstronomyPicturePresenter presenter, {
     required Pagination pagination,
   });
 }
 
-final class GetAstronomyPicturesWithPaginationImpl
-    implements GetAstronomyPicturesWithPagination {
-  const GetAstronomyPicturesWithPaginationImpl(this.repo);
+final class GetAstronomyPicturesWithPaginationDescImpl
+    implements GetAstronomyPicturesWithPaginationDesc {
+  const GetAstronomyPicturesWithPaginationDescImpl(this.repo);
 
   final AstronomyPictureRepo repo;
 
@@ -21,7 +22,7 @@ final class GetAstronomyPicturesWithPaginationImpl
     AstronomyPicturePresenter presenter, {
     required Pagination pagination,
   }) async {
-    final result = await repo.getAstronomyPictures(pagination);
+    final result = await repo.getAstronomyPicturesDesc(pagination);
     result.fold(presenter.failure, presenter.success);
   }
 }

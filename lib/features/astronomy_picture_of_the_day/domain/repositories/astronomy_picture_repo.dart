@@ -7,8 +7,9 @@ import '../errors/astronomy_picture_failure.dart';
 
 /// Repository of [AstronomyPicture].
 abstract interface class AstronomyPictureRepo {
-  /// Retrieves astronomy pictures whose date falls within the given date range,
-  /// page and the number of pictures per page.
+  /// Retrieves, in descending order of date, astronomy pictures whose date
+  /// falls within the given date range, page and the number of pictures per
+  /// page — [pagination].
   Future<Either<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
-      getAstronomyPictures(Pagination pagination);
+      getAstronomyPicturesDesc(Pagination pagination);
 }

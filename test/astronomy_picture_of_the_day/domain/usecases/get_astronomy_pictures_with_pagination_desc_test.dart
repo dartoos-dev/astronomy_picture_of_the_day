@@ -4,7 +4,7 @@ import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_d
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/errors/astronomy_picture_failure.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/presenter/astronomy_picture_presenter.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/repositories/astronomy_picture_repo.dart';
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/usecases/get_astronomy_pictures_with_pagination.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/usecases/get_astronomy_pictures_with_pagination_desc.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/total_pictures.dart';
 import 'package:dartz/dartz.dart';
@@ -19,7 +19,7 @@ class MockAstronomyPicturePresenter extends Mock
 void main() {
   late MockAstronomyPictureRepo mockRepo;
   late MockAstronomyPicturePresenter mockPresenter;
-  late GetAstronomyPicturesWithPagination getAstronomyPicturesUsecase;
+  late GetAstronomyPicturesWithPaginationDesc getAstronomyPicturesDescUsecase;
 
   final pagination = Pagination.oneWeek();
   const totalPictures = TotalPictures(10);
@@ -33,8 +33,8 @@ void main() {
   setUp(() {
     mockRepo = MockAstronomyPictureRepo();
     mockPresenter = MockAstronomyPicturePresenter();
-    getAstronomyPicturesUsecase =
-        GetAstronomyPicturesWithPaginationImpl(mockRepo);
+    getAstronomyPicturesDescUsecase =
+        GetAstronomyPicturesWithPaginationDescImpl(mockRepo);
   });
 
   group('Success:', () {
@@ -61,13 +61,16 @@ void main() {
         totalPictures: totalPictures,
         currentPagePictures: pictures,
       );
-      when(() => mockRepo.getAstronomyPictures(pagination))
+      when(() => mockRepo.getAstronomyPicturesDesc(pagination))
           .thenAnswer((_) async => Right(picturesWithPagination));
 
       // There should be no interaction with Presenter.
       verifyNever(() => mockPresenter.success(any()));
       // act
-      await getAstronomyPicturesUsecase(mockPresenter, pagination: pagination);
+      await getAstronomyPicturesDescUsecase(
+        mockPresenter,
+        pagination: pagination,
+      );
 
       // assert
       // There should be 1 interaction with Presenter.
@@ -79,18 +82,21 @@ void main() {
       // arrange
       const zeroPicturesWithPagination =
           AstronomyPicturesWithPagination.empty();
-      when(() => mockRepo.getAstronomyPictures(pagination))
+      when(() => mockRepo.getAstronomyPicturesDesc(pagination))
           .thenAnswer((_) async => const Right(zeroPicturesWithPagination));
 
       // There should be no interaction with Repo and Presenter.
-      verifyNever(() => mockRepo.getAstronomyPictures(any()));
+      verifyNever(() => mockRepo.getAstronomyPicturesDesc(any()));
       verifyNever(() => mockPresenter.success(any()));
       // act
-      await getAstronomyPicturesUsecase(mockPresenter, pagination: pagination);
+      await getAstronomyPicturesDescUsecase(
+        mockPresenter,
+        pagination: pagination,
+      );
 
       // assert
       // There should be 1 interaction with Repo and Presenter.
-      verify(() => mockRepo.getAstronomyPictures(pagination)).called(1);
+      verify(() => mockRepo.getAstronomyPicturesDesc(pagination)).called(1);
       verify(() => mockPresenter.success(zeroPicturesWithPagination)).called(1);
       // no failure interaction
       verifyNever(() => mockPresenter.failure(any()));
@@ -101,17 +107,20 @@ void main() {
     test('should pass "AstronomyPictureFailure" to Presenter', () async {
       // arrange
       const failure = RetrievalFailure();
-      when(() => mockRepo.getAstronomyPictures(any()))
+      when(() => mockRepo.getAstronomyPicturesDesc(any()))
           .thenAnswer((_) async => const Left(failure));
 
       // There should be no interaction with Repo and Presenter.
-      verifyNever(() => mockRepo.getAstronomyPictures(any()));
+      verifyNever(() => mockRepo.getAstronomyPicturesDesc(any()));
       // act
-      await getAstronomyPicturesUsecase(mockPresenter, pagination: pagination);
+      await getAstronomyPicturesDescUsecase(
+        mockPresenter,
+        pagination: pagination,
+      );
 
       // assert
       // There should be 1 interaction with Repo and Presenter.
-      verify(() => mockRepo.getAstronomyPictures(pagination)).called(1);
+      verify(() => mockRepo.getAstronomyPicturesDesc(pagination)).called(1);
       verify(() => mockPresenter.failure(failure)).called(1);
       // no success interaction
       verifyNever(() => mockPresenter.success(any()));
