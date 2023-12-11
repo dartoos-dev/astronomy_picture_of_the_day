@@ -11,6 +11,7 @@ import 'package:astronomy_picture_of_the_day/shared/connectivity/data/drivers/co
 import 'package:astronomy_picture_of_the_day/shared/errors/data_source_exception.dart';
 import 'package:astronomy_picture_of_the_day/shared/errors/driver_exception.dart';
 import 'package:astronomy_picture_of_the_day/shared/logger/log_and_left.dart';
+import 'package:astronomy_picture_of_the_day/shared/value_objects/id.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -55,6 +56,84 @@ void main() {
     );
   });
 
+  group('astronomy picture by its id:', () {
+    test('should return an astronomy picture when found', () async {
+      const idValue = '123-abc';
+      // arrange
+      final picture = AstronomyPicture(
+        id: const ID(idValue),
+        date: DateTime.parse("2023-11-19"),
+        explanation: 'Blah blah blah',
+        title: 'A title',
+        mediumDefinitionUrl: Uri.parse('http://astronomy_pictures/img1'),
+        highDefinitionUrl: Uri.parse('http://astronomy_picture/hd/img1'),
+      );
+
+      when(() => mockLocalDataSource.getAstronomyPictureById(idValue))
+          .thenAnswer((_) async => picture);
+
+      // act
+      final result = await mockLocalDataSource.getAstronomyPictureById(idValue);
+
+      // assert
+      // must have found by id.
+      expect(result!.id, equals(const ID<AstronomyPicture>(idValue)));
+      // There should be 1 interaction with DataSource.
+      verify(() => mockLocalDataSource.getAstronomyPictureById(idValue))
+          .called(1);
+    });
+    test('should return null if not found', () async {
+      const idValue = '789-xyz';
+      // arrange
+      when(() => mockLocalDataSource.getAstronomyPictureById(any()))
+          .thenAnswer((_) async => null);
+
+      // act
+      final result = await mockLocalDataSource.getAstronomyPictureById(idValue);
+
+      // assert
+      // must have not found by id.
+      expect(result, null);
+      // There should be 1 interaction with DataSource.
+      verify(() => mockLocalDataSource.getAstronomyPictureById(idValue))
+          .called(1);
+    });
+    test('should log and return "RetrievalFailure" enum', () async {
+      // arrange
+      const idValue = 'An Id value';
+      const retrievalFailure = RetrievalFailure();
+      const dataSourceException =
+          DataSourceException('Error while retrieving data from local storage');
+
+      when(
+        () => mockLocalDataSource.getAstronomyPictureById(any()),
+      ).thenAnswer((_) async => throw dataSourceException);
+      when(
+        () => mockLogger.call<AstronomyPictureFailure, AstronomyPicture?>(
+          retrievalFailure,
+          message: any(named: "message"),
+          exception: dataSourceException,
+          stacktrace: any(named: "stacktrace"),
+        ),
+      ).thenAnswer((_) => const Left(retrievalFailure));
+
+      // act
+      final result = await repo.getAstronomyPictureById(idValue);
+
+      // assert
+      // There should be 1 interaction with the logger.
+      verify(
+        () => mockLogger.call<AstronomyPictureFailure, AstronomyPicture?>(
+          retrievalFailure,
+          message: any(named: "message"),
+          exception: dataSourceException,
+          stacktrace: any(named: "stacktrace"),
+        ),
+      ).called(1);
+
+      expect(result, equals(const Left(retrievalFailure)));
+    });
+  });
   group('Successful load of pictures from local storage', () {
     late List<AstronomyPicture> localPictures;
     late AstronomyPicturesWithPagination localPicturesWithPagination;

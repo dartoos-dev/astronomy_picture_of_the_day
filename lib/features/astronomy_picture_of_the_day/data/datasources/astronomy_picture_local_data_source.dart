@@ -4,6 +4,11 @@ import '../../domain/entities/astronomy_picture.dart';
 
 /// Local Data Source of Astronomy Pictures.
 abstract interface class AstronomyPictureLocalDataSource {
+  /// Retrieves an [AstronomyPicture] by its id or null if not found.
+  ///
+  /// Throws [DatasourceException] to indicate an operation error.
+  Future<AstronomyPicture?> getAstronomyPictureById(String id);
+
   /// Retrieves, in descending order of date, astronomy pictures according to
   /// the given date date range, page and the number of pictures per page —
   /// [pagination].

@@ -12,4 +12,8 @@ abstract interface class AstronomyPictureRepo {
   /// page — [pagination].
   Future<Either<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
       getAstronomyPicturesDesc(Pagination pagination);
+
+  /// Retrieves an [AstronomyPicture] by its id or null if not found.
+  Future<Either<AstronomyPictureFailure, AstronomyPicture?>>
+      getAstronomyPictureById(String id);
 }

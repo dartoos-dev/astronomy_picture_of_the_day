@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Retrieval of picture by id —
+  [#76](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/76).
+
 ## [0.1.3] - 2023-12-11
 
 ### Added
@@ -18,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#67](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/67).
 
 - Pictures retrieval in descending order of picture date —
-  [#73](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/7).
+  [#73](https://github.com/dartoos-dev/astronomy_picture_of_the_day/issues/73).
 
 ## [0.1.2] - 2023-12-02
 

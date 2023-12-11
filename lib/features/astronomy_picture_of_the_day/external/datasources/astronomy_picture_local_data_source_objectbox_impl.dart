@@ -56,6 +56,21 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
   }
 
   @override
+  Future<AstronomyPicture?> getAstronomyPictureById(String id) async {
+    final idQuery = _idQuery(id);
+    try {
+      return idQuery.findUnique();
+    } on Exception catch (ex) {
+      throw DataSourceException(
+        'Error getting picture by the id "$id" in local database "ObjectBox"',
+        exception: ex,
+      );
+    } finally {
+      idQuery.close();
+    }
+  }
+
+  @override
   Future<AstronomyPicturesWithPagination> getAstronomyPicturesDesc(
     Pagination pagination,
   ) async {
@@ -109,6 +124,11 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
       Page: ${pagination.page}'
       Pictures per page: ${pagination.perPage};
     """;
+  }
+
+  /// Query by id.
+  Query<AstronomyPictureObjectboxModel> _idQuery(String id) {
+    return _box.query(AstronomyPictureObjectboxModel_.dbId.equals(id)).build();
   }
 
   /// Query by [DateRange.start].

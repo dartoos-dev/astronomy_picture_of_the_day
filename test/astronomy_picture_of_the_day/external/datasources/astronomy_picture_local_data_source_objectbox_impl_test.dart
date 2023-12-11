@@ -357,6 +357,24 @@ void main() async {
           expect(containsPicturesOneDayEarlierAndOneDayLater, false);
         });
       });
+      group('method "getAstronomyPictureById:"', () {
+        test('should return a picture if found', () async {
+          final result1 =
+              await localDataSource.getAstronomyPictureById(picture1.id.value);
+          expect(result1!.id, equals(picture1.id));
+          final result2 =
+              await localDataSource.getAstronomyPictureById(picture2.id.value);
+          expect(result2!.id, equals(picture2.id));
+          final result3 =
+              await localDataSource.getAstronomyPictureById(picture3.id.value);
+          expect(result3!.id, equals(picture3.id));
+        });
+        test('should return null if not found', () async {
+          final result = await localDataSource
+              .getAstronomyPictureById('A non-existent Id');
+          expect(result, null);
+        });
+      });
       group('method "getAstronomyPicturesDesc:"', () {
         test('should return pictures in descending order of date', () async {
           final page1PerPage10 = Pagination(
@@ -494,6 +512,19 @@ void main() async {
       bool caughtDataSourceException = false;
       try {
         await localDataSource.containsPictures(pagination);
+      } on DataSourceException catch (ex) {
+        caughtDataSourceException = true;
+        expect(ex.exception, same(exception));
+      }
+      expect(caughtDataSourceException, true);
+    });
+
+    test('method "getPictureById" should throw "DataSourceException"',
+        () async {
+      when(() => mockQuery.findUnique()).thenThrow(exception);
+      bool caughtDataSourceException = false;
+      try {
+        await localDataSource.getAstronomyPictureById('Id value');
       } on DataSourceException catch (ex) {
         caughtDataSourceException = true;
         expect(ex.exception, same(exception));
