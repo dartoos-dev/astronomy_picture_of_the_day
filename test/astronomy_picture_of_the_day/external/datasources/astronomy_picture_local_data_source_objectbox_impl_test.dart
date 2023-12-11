@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/data/models/astronomy_picture_api_model.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/data/models/astronomy_picture_objectbox_model.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/pagination.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/entities/astronomy_picture.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
@@ -27,7 +28,20 @@ void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AstronomyPictureLocalDataSourceObjectboxImpl localDataSource;
 
+  final dateRange = DateRange(
+    start: DateTime.parse('2023-11-21'),
+    end: DateTime.parse('2023-11-30'),
+  );
+  final pagination = Pagination(
+    range: dateRange,
+    page: const Page.first(),
+    perPage: const PicturesPerPage.seven(),
+  );
   const objectboxTestFolderPath = './objectbox_test';
+
+  setUpAll(() {
+    registerFallbackValue(Pagination.oneWeek());
+  });
   tearDownAll(() {
     Directory(objectboxTestFolderPath).delete(recursive: true);
   });
@@ -43,32 +57,18 @@ void main() async {
       testStore.close();
     });
     group('with an empty database:', () {
-      final range = DateRange.parse(
-        startDateISO8601: '0001-01-01',
-        endDateISO8601: '1999-31-12',
-      );
-      const firstPage = Page.first();
-      const tenPerPage = PicturesPerPage(10);
       test('predicate methods checking for existance should return false',
           () async {
-        final containsPictures = await localDataSource.containsPictures(
-          range,
-          firstPage,
-          tenPerPage,
-        );
+        final containsPictures =
+            await localDataSource.containsPictures(pagination);
         expect(containsPictures, false);
       });
       test('fetching methods should return empty values', () async {
         const zeroPage = Page.zero();
         const zeroTotal = TotalPictures.zero();
-        final pictures =
-            await localDataSource.getAstronomyPicturesWithPaginationByDateRange(
-          range,
-          page: firstPage,
-          perPage: tenPerPage,
-        );
+        final pictures = await localDataSource.getAstronomyPictures(pagination);
         expect(pictures.currentPagePictures, const <AstronomyPicture>[]);
-        expect(pictures.currentPage, firstPage);
+        expect(pictures.currentPage, const Page.first());
         expect(pictures.lastPage, zeroPage);
         expect(pictures.totalPictures, zeroTotal);
       });
@@ -218,79 +218,97 @@ void main() async {
       group('method "containsPictures" and range between $date1 and $date10',
           () {
         test('should return true when page is 1 and perPage is 1', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page1,
-            onePerPage,
+          final page1PerPage1 = Pagination(
+            range: range1To10,
+            page: page1,
+            perPage: onePerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page1PerPage1);
           expect(containsPictures, true);
         });
         test('should return true when page is 1 and perPage is 100', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page1,
-            aHundredPerPage,
+          final page1PerPage100 = Pagination(
+            range: range1To10,
+            page: page1,
+            perPage: aHundredPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page1PerPage100);
           expect(containsPictures, true);
         });
         test('should return false when page is 2 and perPage is 100', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page2,
-            aHundredPerPage,
+          final page2PerPage100 = Pagination(
+            range: range1To10,
+            page: page2,
+            perPage: aHundredPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page2PerPage100);
           expect(containsPictures, false);
         });
         test('should return true when page is 10 and perPage is 1', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page10,
-            onePerPage,
+          final page10PerPage1 = Pagination(
+            range: range1To10,
+            page: page10,
+            perPage: onePerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page10PerPage1);
           expect(containsPictures, true);
         });
         test('should return false when page is 11 and perPage is 1', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page11,
-            onePerPage,
+          final page11PerPage1 = Pagination(
+            range: range1To10,
+            page: page11,
+            perPage: onePerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page11PerPage1);
           expect(containsPictures, false);
         });
         test('should return true when page is 1 and perPage is 4', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page1,
-            fourPerPage,
+          final page1PerPage4 = Pagination(
+            range: range1To10,
+            page: page1,
+            perPage: fourPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page1PerPage4);
           expect(containsPictures, true);
         });
         test('should return true when page is 2 and perPage is 4', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page2,
-            fourPerPage,
+          final page2PerPage4 = Pagination(
+            range: range1To10,
+            page: page2,
+            perPage: fourPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page2PerPage4);
           expect(containsPictures, true);
         });
         test('should return true when page is 3 and perPage is 4', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page3,
-            fourPerPage,
+          final page3PerPage4 = Pagination(
+            range: range1To10,
+            page: page3,
+            perPage: fourPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page3PerPage4);
           expect(containsPictures, true);
         });
         test('should return false when page is 4 and perPage is 4', () async {
-          final containsPictures = await localDataSource.containsPictures(
-            range1To10,
-            page4,
-            fourPerPage,
+          final page4PerPage4 = Pagination(
+            range: range1To10,
+            page: page4,
+            perPage: fourPerPage,
           );
+          final containsPictures =
+              await localDataSource.containsPictures(page4PerPage4);
           expect(containsPictures, false);
         });
       });
-      group('method "containsPicture" and "wider" date ranges', () {
+      group('method "containsPicture" with "wider" date ranges', () {
         final oneDayEarlierRange = DateRange(
           start: picture1.date.subtract(const Duration(days: 1)),
           end: picture10.date,
@@ -304,71 +322,81 @@ void main() async {
           end: picture10.date.add(const Duration(days: 1)),
         );
         test('should return false when date range is earlier', () async {
-          final containsPicturesOneDayEarlier =
-              await localDataSource.containsPictures(
-            oneDayEarlierRange,
-            page1,
-            onePerPage,
+          final oneDayEarlierPage1PerPage1 = Pagination(
+            range: oneDayEarlierRange,
+            page: page1,
+            perPage: onePerPage,
           );
+          final containsPicturesOneDayEarlier = await localDataSource
+              .containsPictures(oneDayEarlierPage1PerPage1);
           expect(containsPicturesOneDayEarlier, false);
         });
 
         test('should return false when date range is later', () async {
-          final containsPicturesOneDayLater =
-              await localDataSource.containsPictures(
-            oneDayLaterRange,
-            page1,
-            onePerPage,
+          final oneDayLaterPage1PerPage1 = Pagination(
+            range: oneDayLaterRange,
+            page: page1,
+            perPage: onePerPage,
           );
+          final containsPicturesOneDayLater =
+              await localDataSource.containsPictures(oneDayLaterPage1PerPage1);
           expect(containsPicturesOneDayLater, false);
         });
 
         test('should return false when date range is both earlier and later',
             () async {
-          final containsPicturesOneDayEarlierAndOneDayLater =
-              await localDataSource.containsPictures(
-            oneDayEarlierAndOneDayLaterRange,
-            page1,
-            onePerPage,
+          final oneDayEarlierAndOneDayLaterPage1PerPage1 = Pagination(
+            range: oneDayEarlierAndOneDayLaterRange,
+            page: page1,
+            perPage: onePerPage,
           );
+          final containsPicturesOneDayEarlierAndOneDayLater =
+              await localDataSource
+                  .containsPictures(oneDayEarlierAndOneDayLaterPage1PerPage1);
           expect(containsPicturesOneDayEarlierAndOneDayLater, false);
         });
       });
-      group('method "getAstronomyPicturesWithPaginationByDateRange"', () {
+      group('method "getAstronomyPictures:"', () {
         test('should return pictures according to pagination', () async {
-          final firstPage = await localDataSource
-              .getAstronomyPicturesWithPaginationByDateRange(
-            range1To10,
+          final page1PerPage4 = Pagination(
+            range: range1To10,
             page: page1,
             perPage: fourPerPage,
           );
+          final firstPage =
+              await localDataSource.getAstronomyPictures(page1PerPage4);
           expect(
             firstPage.currentPagePictures,
             equals([picture10, picture9, picture8, picture7]),
           );
-          final secondPage = await localDataSource
-              .getAstronomyPicturesWithPaginationByDateRange(
-            range1To10,
+
+          final page2PerPage4 = Pagination(
+            range: range1To10,
             page: page2,
             perPage: fourPerPage,
           );
+          final secondPage =
+              await localDataSource.getAstronomyPictures(page2PerPage4);
           expect(
             secondPage.currentPagePictures,
             equals([picture6, picture5, picture4, picture3]),
           );
-          final lastPage = await localDataSource
-              .getAstronomyPicturesWithPaginationByDateRange(
-            range1To10,
+          final page3PerPage4 = Pagination(
+            range: range1To10,
             page: page3,
             perPage: fourPerPage,
           );
+          final lastPage =
+              await localDataSource.getAstronomyPictures(page3PerPage4);
           expect(lastPage.currentPagePictures, equals([picture2, picture1]));
-          final pastTheEndPage = await localDataSource
-              .getAstronomyPicturesWithPaginationByDateRange(
-            range1To10,
+
+          final page4PerPage4 = Pagination(
+            range: range1To10,
             page: page4,
             perPage: fourPerPage,
           );
+          final pastTheEndPage =
+              await localDataSource.getAstronomyPictures(page4PerPage4);
           expect(pastTheEndPage.currentPagePictures.isEmpty, true);
         });
       });
@@ -378,12 +406,6 @@ void main() async {
     late MockBox mockBox;
     late MockQuery mockQuery;
     late MockQueryBuilder mockQueryBuilder;
-    final range = DateRange.parse(
-      startDateISO8601: '2023-11-01',
-      endDateISO8601: '2023-12-01',
-    );
-    const page = Page.first();
-    const perPage = PicturesPerPage(5);
     setUp(() async {
       mockBox = MockBox();
       mockQuery = MockQuery();
@@ -401,19 +423,13 @@ void main() async {
       when(() => mockQuery.count()).thenReturn(0);
       when(() => mockQuery.find()).thenReturn(const []);
     });
-    test('method "containsPicture" should close the 3 "Query" objects it uses',
+    test('method "containsPictures" should close the 3 Query objects it uses',
         () {
-      localDataSource.containsPictures(range, page, perPage);
+      localDataSource.containsPictures(pagination);
       verify(() => mockQuery.close()).called(3);
     });
-    test(
-        'method "getAstronomyPicturesWithPaginationByDateRange" should close "Query" object',
-        () {
-      localDataSource.getAstronomyPicturesWithPaginationByDateRange(
-        range,
-        page: page,
-        perPage: perPage,
-      );
+    test('method "getAstronomyPictures" should close "Query" object', () {
+      localDataSource.getAstronomyPictures(pagination);
       verify(() => mockQuery.close()).called(1);
     });
   });
@@ -421,12 +437,6 @@ void main() async {
     late MockBox mockBox;
     late MockQuery mockQuery;
     late MockQueryBuilder mockQueryBuilder;
-    final range = DateRange.parse(
-      startDateISO8601: '2023-11-01',
-      endDateISO8601: '2023-12-01',
-    );
-    const page = Page.first();
-    const perPage = PicturesPerPage(5);
     final exception = Exception('Objectbox error');
     setUp(() {
       mockBox = MockBox();
@@ -461,28 +471,19 @@ void main() async {
       when(() => mockQuery.count()).thenThrow(exception);
       bool caughtDataSourceException = false;
       try {
-        await localDataSource.containsPictures(
-          range,
-          page,
-          perPage,
-        );
+        await localDataSource.containsPictures(pagination);
       } on DataSourceException catch (ex) {
         caughtDataSourceException = true;
         expect(ex.exception, same(exception));
       }
       expect(caughtDataSourceException, true);
     });
-    test(
-        'method "getAstronomyPicturesWithPaginationByDateRange" should throw "DataSourceException"',
+    test('method "getAstronomyPictures" should throw "DataSourceException"',
         () async {
       when(() => mockQuery.find()).thenThrow(exception);
       bool caughtDataSourceException = false;
       try {
-        await localDataSource.getAstronomyPicturesWithPaginationByDateRange(
-          range,
-          page: page,
-          perPage: perPage,
-        );
+        await localDataSource.getAstronomyPictures(pagination);
       } on DataSourceException catch (ex) {
         caughtDataSourceException = true;
         expect(ex.exception, same(exception));

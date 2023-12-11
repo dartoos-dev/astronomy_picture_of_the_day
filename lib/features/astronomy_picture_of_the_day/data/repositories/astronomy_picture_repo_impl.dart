@@ -2,16 +2,13 @@ import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_d
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/errors/astronomy_picture_failure.dart';
 
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/date_range.dart';
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
-
 import 'package:dartz/dartz.dart';
 
 import '../../../../shared/connectivity/data/drivers/connectivity_driver.dart';
 import '../../../../shared/errors/data_source_exception.dart';
 import '../../../../shared/errors/driver_exception.dart';
 import '../../../../shared/logger/log_and_left.dart';
+import '../../domain/dtos/pagination.dart';
 import '../../domain/repositories/astronomy_picture_repo.dart';
 import '../datasources/astronomy_picture_local_data_source.dart';
 import '../datasources/astronomy_picture_remote_data_source.dart';
@@ -36,36 +33,22 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
 
   @override
   Future<Either<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
-      getAstronomyPicturesWithPaginationByDateRange(
-    DateRange range, {
-    required Page page,
-    required PicturesPerPage perPage,
-  }) async {
+      getAstronomyPictures(Pagination pagination) async {
     try {
       // The first attempt is to get all pictures from the device's local
       // storage.
-      if (await _localDataSource.containsPictures(range, page, perPage)) {
-        return await _getPicturesFromLocalDataSource(
-          range,
-          page: page,
-          picturesPerPage: perPage,
-        );
+      if (await _localDataSource.containsPictures(pagination)) {
+        return await _getPicturesFromLocalDataSource(pagination);
       }
       // fetches pictures from remote server and caches them locally.
       if (await _connectivityDriver.hasActiveInternetConnection) {
         return await _getPicturesFromRemoteDataSourceAndCachesThemLocally(
-          range,
-          page: page,
-          picturesPerPage: perPage,
+          pagination,
         );
       }
       // Best-effort policy: at this point, the local storage does not contain all the
       // images whose dates are within [range], but it may contain some of them.
-      return await _getPicturesFromLocalDataSource(
-        range,
-        page: page,
-        picturesPerPage: perPage,
-      );
+      return await _getPicturesFromLocalDataSource(pagination);
     } on DataSourceException catch (ex, st) {
       return _logger(
         const RetrievalFailure(),
@@ -82,33 +65,16 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
   }
 
   Future<Right<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
-      _getPicturesFromLocalDataSource(
-    DateRange range, {
-    required Page page,
-    required PicturesPerPage picturesPerPage,
-  }) async {
-    return Right(
-      await _localDataSource.getAstronomyPicturesWithPaginationByDateRange(
-        range,
-        page: page,
-        perPage: picturesPerPage,
-      ),
-    );
+      _getPicturesFromLocalDataSource(Pagination pagination) async {
+    return Right(await _localDataSource.getAstronomyPictures(pagination));
   }
 
   /// Gets images from remote server and caches them locally.
   Future<Right<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
       _getPicturesFromRemoteDataSourceAndCachesThemLocally(
-    DateRange range, {
-    required Page page,
-    required PicturesPerPage picturesPerPage,
-  }) async {
-    final result =
-        await _remoteDataSource.getAstronomyPicturesWithPaginationByDateRange(
-      range,
-      page: page,
-      perPage: picturesPerPage,
-    );
+    Pagination pagination,
+  ) async {
+    final result = await _remoteDataSource.getAstronomyPictures(pagination);
     await _localDataSource.saveAstronomyPictures(result.currentPagePictures);
     return Right(result);
   }

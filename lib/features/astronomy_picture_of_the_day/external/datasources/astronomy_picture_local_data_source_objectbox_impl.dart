@@ -7,12 +7,12 @@ import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_d
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
 
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/pictures_per_page.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/total_pictures.dart';
 
 import '../../../../objectbox.g.dart';
 import '../../../../shared/errors/data_source_exception.dart';
 import '../../data/datasources/astronomy_picture_local_data_source.dart';
+import '../../domain/dtos/pagination.dart';
 
 /// [AstronomyPictureLocalDataSource] implementation that uses Objectbox as the
 /// NoSql local database.
@@ -26,30 +26,25 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
   final Box<AstronomyPictureObjectboxModel> _box;
 
   @override
-  Future<bool> containsPictures(
-    DateRange range,
-    Page page,
-    PicturesPerPage perPage,
-  ) async {
+  Future<bool> containsPictures(Pagination pagination) async {
+    final range = pagination.range;
     final dateRangeQuery = _dateRangeQuery(range);
     final startDateQuery = _startDateQuery(range);
     final endDateQuery = _endDateQuery(range);
     try {
-      final containsPicturesInRange =
+      final bool containsPicturesWithinDateRange =
           startDateQuery.count() >= 1 && endDateQuery.count() >= 1;
-      if (!containsPicturesInRange) {
+      if (!containsPicturesWithinDateRange) {
         return false;
       }
       final totalInDatabase = TotalPictures(dateRangeQuery.count());
-      final lastPageInDataBase = Page.last(totalInDatabase, perPage);
-      return lastPageInDataBase >= page;
+      final lastPageInDataBase = Page.last(totalInDatabase, pagination.perPage);
+      return lastPageInDataBase >= pagination.page;
     } on Exception catch (ex) {
       throw DataSourceException(
         _formattedErrorMessage(
           'Error when counting pictures saved in local database "ObjectBox"',
-          range,
-          page,
-          perPage,
+          pagination,
         ),
         exception: ex,
       );
@@ -61,23 +56,21 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
   }
 
   @override
-  Future<AstronomyPicturesWithPagination>
-      getAstronomyPicturesWithPaginationByDateRange(
-    DateRange range, {
-    required Page page,
-    required PicturesPerPage perPage,
-  }) async {
-    final dateRangeQueryOrderByDateAsc = _dateRangeQueryOrderByDateDesc(range);
+  Future<AstronomyPicturesWithPagination> getAstronomyPictures(
+    Pagination pagination,
+  ) async {
+    final dateRangeQueryOrderByDateAsc =
+        _dateRangeQueryOrderByDateDesc(pagination.range);
     try {
       final totalPicturesByDateRange =
           TotalPictures(dateRangeQueryOrderByDateAsc.count());
       final pagingQuery = dateRangeQueryOrderByDateAsc
-        ..offset = page.offset(perPage)
-        ..limit = perPage.value;
+        ..offset = pagination.page.offset(pagination.perPage)
+        ..limit = pagination.perPage.value;
       final pagePictures = pagingQuery.find();
       return AstronomyPicturesWithPagination(
-        currentPage: page,
-        lastPage: Page.last(totalPicturesByDateRange, perPage),
+        currentPage: pagination.page,
+        lastPage: Page.last(totalPicturesByDateRange, pagination.perPage),
         totalPictures: totalPicturesByDateRange,
         currentPagePictures: pagePictures,
       );
@@ -85,9 +78,7 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
       throw DataSourceException(
         _formattedErrorMessage(
           'Error retrieving page with astronomy pictures from local database "ObjectBox".',
-          range,
-          page,
-          perPage,
+          pagination,
         ),
         exception: ex,
       );
@@ -112,17 +103,12 @@ final class AstronomyPictureLocalDataSourceObjectboxImpl
     }
   }
 
-  String _formattedErrorMessage(
-    String mainMessage,
-    DateRange range,
-    Page page,
-    PicturesPerPage perPage,
-  ) {
+  String _formattedErrorMessage(String mainMessage, Pagination pagination) {
     return """
       $mainMessage
-      Date range: [${range.startDateIso8601} – ${range.endDateIso8601}]
-      Page: $page'
-      Pictures per page: $perPage;
+      Date range: [${pagination.range.startDateIso8601} – ${pagination.range.endDateIso8601}]
+      Page: ${pagination.page}'
+      Pictures per page: ${pagination.perPage};
     """;
   }
 
