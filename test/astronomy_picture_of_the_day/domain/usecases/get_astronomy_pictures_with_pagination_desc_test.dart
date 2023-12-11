@@ -2,7 +2,7 @@ import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_d
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/pagination.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/entities/astronomy_picture.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/errors/astronomy_picture_failure.dart';
-import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/presenter/astronomy_picture_presenter.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/presenter/astronomy_picture_list_presenter.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/repositories/astronomy_picture_repo.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/usecases/get_astronomy_pictures_with_pagination_desc.dart';
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/value_objects/page.dart';
@@ -13,12 +13,12 @@ import 'package:mocktail/mocktail.dart';
 
 class MockAstronomyPictureRepo extends Mock implements AstronomyPictureRepo {}
 
-class MockAstronomyPicturePresenter extends Mock
-    implements AstronomyPicturePresenter {}
+class MockAstronomyPictureListPresenter extends Mock
+    implements AstronomyPictureListPresenter {}
 
 void main() {
   late MockAstronomyPictureRepo mockRepo;
-  late MockAstronomyPicturePresenter mockPresenter;
+  late MockAstronomyPictureListPresenter mockPresenter;
   late GetAstronomyPicturesWithPaginationDesc getAstronomyPicturesDescUsecase;
 
   final pagination = Pagination.oneWeek();
@@ -32,7 +32,7 @@ void main() {
   });
   setUp(() {
     mockRepo = MockAstronomyPictureRepo();
-    mockPresenter = MockAstronomyPicturePresenter();
+    mockPresenter = MockAstronomyPictureListPresenter();
     getAstronomyPicturesDescUsecase =
         GetAstronomyPicturesWithPaginationDescImpl(mockRepo);
   });

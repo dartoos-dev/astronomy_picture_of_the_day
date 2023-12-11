@@ -1,4 +1,5 @@
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/dtos/astronomy_pictures_with_pagination.dart';
+import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/entities/astronomy_picture.dart';
 
 import 'package:astronomy_picture_of_the_day/features/astronomy_picture_of_the_day/domain/errors/astronomy_picture_failure.dart';
 
@@ -62,6 +63,25 @@ class AstronomyPictureRepoImpl implements AstronomyPictureRepo {
         stacktrace: st,
       );
     }
+  }
+
+  @override
+  Future<Either<AstronomyPictureFailure, AstronomyPicture?>>
+      getAstronomyPictureById(String id) async {
+    try {
+      return await _getPictureFromLocalDataSourceById(id);
+    } on DataSourceException catch (ex, st) {
+      return _logger(
+        const RetrievalFailure(),
+        exception: ex,
+        stacktrace: st,
+      );
+    }
+  }
+
+  Future<Right<AstronomyPictureFailure, AstronomyPicture?>>
+      _getPictureFromLocalDataSourceById(String id) async {
+    return Right(await _localDataSource.getAstronomyPictureById(id));
   }
 
   Future<Right<AstronomyPictureFailure, AstronomyPicturesWithPagination>>
